@@ -411,8 +411,16 @@
 
             <div class="grid grid-cols-1 gap-2 pt-2 text-xs sm:text-sm text-stone-700">
                 <div class="flex justify-between border-b border-stone-100 pb-2">
-                    <span class="font-medium text-stone-500"><i class="fa-solid fa-location-dot text-velvet-800 me-2"></i>Location:</span>
+                    <span class="font-medium text-stone-500"><i class="fa-solid fa-heart text-velvet-800 me-2"></i>Date Type:</span>
+                    <span id="admin-date-type" class="font-semibold text-stone-900">Regular Date</span>
+                </div>
+                <div class="flex justify-between border-b border-stone-100 pb-2">
+                    <span class="font-medium text-stone-500"><i class="fa-solid fa-location-dot text-velvet-800 me-2"></i>Plan / Location:</span>
                     <span id="admin-loc" class="font-semibold text-stone-900">CC's House</span>
+                </div>
+                <div class="flex justify-between border-b border-stone-100 pb-2">
+                    <span class="font-medium text-stone-500"><i class="fa-solid fa-music text-velvet-800 me-2"></i>Music:</span>
+                    <span id="admin-music" class="font-semibold text-stone-900">Not applicable</span>
                 </div>
                 <div class="flex justify-between border-b border-stone-100 pb-2">
                     <span class="font-medium text-stone-500"><i class="fa-solid fa-calendar text-velvet-800 me-2"></i>Date:</span>
@@ -497,11 +505,29 @@
         <!-- SELECTION FORM SECTION -->
         <section class="space-y-6 relative z-10">
 
-            <!-- 1. LOCATION SELECTION -->
+            <!-- 1. DATE TYPE SELECTION -->
             <div class="bg-white/80 backdrop-blur-sm p-4 sm:p-6 rounded-xl border border-gold/30 shadow-sm">
                 <div class="flex items-center space-x-2 mb-3 text-velvet-900">
+                    <i class="fa-solid fa-heart text-gold text-base"></i>
+                    <h3 class="serif-font text-lg sm:text-xl font-bold tracking-wide">1. Choose Your Date Style</h3>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5" id="date-type-options">
+                    <button type="button" aria-pressed="true" onclick="selectDateType(this, 'Regular Date')" class="option-card selected p-4 rounded-xl text-left">
+                        <span class="font-semibold text-velvet-950 block">Regular Date</span>
+                        <span class="text-xs text-stone-500">An evening out at one of the Aleppo venues</span>
+                    </button>
+                    <button type="button" aria-pressed="false" onclick="selectDateType(this, 'Car Date')" class="option-card p-4 rounded-xl text-left">
+                        <span class="font-semibold text-velvet-950 block">Car Date</span>
+                        <span class="text-xs text-stone-500">A private, cozy drive together</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 2. REGULAR DATE LOCATION SELECTION -->
+            <div id="regular-date-options" class="bg-white/80 backdrop-blur-sm p-4 sm:p-6 rounded-xl border border-gold/30 shadow-sm">
+                <div class="flex items-center space-x-2 mb-3 text-velvet-900">
                     <i class="fa-solid fa-location-dot text-gold text-base"></i>
-                    <h3 class="serif-font text-lg sm:text-xl font-bold tracking-wide">1. Where Should We Go?</h3>
+                    <h3 class="serif-font text-lg sm:text-xl font-bold tracking-wide">2. Where Should We Go?</h3>
                 </div>
 
                 <div class="grid grid-cols-1 gap-2.5" id="location-options">
@@ -575,11 +601,37 @@
                 </div>
             </div>
 
-            <!-- 2. DATE SELECTION (Nov 10 – Nov 15, 2026) -->
+            <!-- 2. CAR DATE MUSIC SELECTION -->
+            <div id="car-date-options" class="bg-white/80 backdrop-blur-sm p-4 sm:p-6 rounded-xl border border-gold/30 shadow-sm hidden">
+                <div class="flex items-center space-x-2 mb-3 text-velvet-900">
+                    <i class="fa-solid fa-music text-gold text-base"></i>
+                    <h3 class="serif-font text-lg sm:text-xl font-bold tracking-wide">2. Choose Your Ride Soundtrack</h3>
+                </div>
+                <div class="grid grid-cols-1 gap-2.5" id="music-options">
+                    <button type="button" aria-pressed="true" onclick="selectMusic(this, 'Late Night Jazz / Chill R&B')" class="option-card selected p-3.5 rounded-xl cursor-pointer flex items-center justify-between text-left">
+                        <span class="flex items-center gap-3"><i class="fa-solid fa-moon text-velvet-700"></i><span><span class="font-semibold text-velvet-950 text-sm block">Late Night Jazz / Chill R&amp;B</span><span class="text-xs text-stone-500">Smooth, mellow late-night vibes</span></span></span>
+                        <span class="check-icon w-5 h-5 rounded-full bg-velvet-800 text-gold flex items-center justify-center text-xs opacity-100 transition-all"><i class="fa-solid fa-check"></i></span>
+                    </button>
+                    <button type="button" aria-pressed="false" onclick="selectMusic(this, 'Classic Arabic Classics / Tarab')" class="option-card p-3.5 rounded-xl cursor-pointer flex items-center justify-between text-left">
+                        <span class="flex items-center gap-3"><i class="fa-solid fa-star-and-crescent text-velvet-700"></i><span><span class="font-semibold text-velvet-950 text-sm block">Classic Arabic Classics / Tarab</span><span class="text-xs text-stone-500">Timeless Arabic melodies</span></span></span>
+                        <span class="check-icon w-5 h-5 rounded-full bg-velvet-800 text-gold flex items-center justify-center text-xs opacity-0 transition-all"><i class="fa-solid fa-check"></i></span>
+                    </button>
+                    <button type="button" aria-pressed="false" onclick="selectMusic(this, 'Acoustic Indie & Soft Pop')" class="option-card p-3.5 rounded-xl cursor-pointer flex items-center justify-between text-left">
+                        <span class="flex items-center gap-3"><i class="fa-solid fa-guitar text-velvet-700"></i><span><span class="font-semibold text-velvet-950 text-sm block">Acoustic Indie &amp; Soft Pop</span><span class="text-xs text-stone-500">Gentle guitars and easy favorites</span></span></span>
+                        <span class="check-icon w-5 h-5 rounded-full bg-velvet-800 text-gold flex items-center justify-center text-xs opacity-0 transition-all"><i class="fa-solid fa-check"></i></span>
+                    </button>
+                    <button type="button" aria-pressed="false" onclick="selectMusic(this, 'Custom Playlist / Surprise Me')" class="option-card p-3.5 rounded-xl cursor-pointer flex items-center justify-between text-left">
+                        <span class="flex items-center gap-3"><i class="fa-solid fa-gift text-velvet-700"></i><span><span class="font-semibold text-velvet-950 text-sm block">Custom Playlist / Surprise Me</span><span class="text-xs text-stone-500">Your playlist—or leave it as a surprise</span></span></span>
+                        <span class="check-icon w-5 h-5 rounded-full bg-velvet-800 text-gold flex items-center justify-center text-xs opacity-0 transition-all"><i class="fa-solid fa-check"></i></span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 3. DATE SELECTION (Nov 10 – Nov 15, 2026) -->
             <div class="bg-white/80 backdrop-blur-sm p-4 sm:p-6 rounded-xl border border-gold/30 shadow-sm">
                 <div class="flex items-center space-x-2 mb-3 text-velvet-900">
                     <i class="fa-solid fa-calendar-heart text-gold text-base"></i>
-                    <h3 class="serif-font text-lg sm:text-xl font-bold tracking-wide">2. Choose The Best Day</h3>
+                    <h3 class="serif-font text-lg sm:text-xl font-bold tracking-wide">3. Choose The Best Day</h3>
                 </div>
 
                 <div class="grid grid-cols-3 sm:grid-cols-6 gap-2" id="date-options">
@@ -616,11 +668,11 @@
                 </div>
             </div>
 
-            <!-- 3. TIME SELECTION (6:30 PM - 8:00 PM) -->
+            <!-- 4. TIME SELECTION (6:30 PM - 8:00 PM) -->
             <div class="bg-white/80 backdrop-blur-sm p-4 sm:p-6 rounded-xl border border-gold/30 shadow-sm">
                 <div class="flex items-center space-x-2 mb-3 text-velvet-900">
                     <i class="fa-regular fa-clock text-gold text-base"></i>
-                    <h3 class="serif-font text-lg sm:text-xl font-bold tracking-wide">3. Pick A Preferred Time</h3>
+                    <h3 class="serif-font text-lg sm:text-xl font-bold tracking-wide">4. Pick A Preferred Time</h3>
                 </div>
 
                 <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5" id="time-options">
@@ -672,7 +724,7 @@
             </div>
             
             <p id="summary-text" class="text-xs text-velvet-100 italic mt-3 serif-font">
-                Meeting at CC's House on Tuesday, Nov 10 at 6:30 PM
+                Regular Date at CC's House on Tuesday, Nov 10, 2026 at 06:30 PM
             </p>
         </section>
 
@@ -709,10 +761,26 @@
 
             <div class="my-5 p-4 bg-white/90 rounded-xl border border-gold/30 text-left space-y-2.5 text-xs sm:text-sm">
                 <div class="flex items-center space-x-3">
+                    <i class="fa-solid fa-heart text-velvet-800 w-4 text-center"></i>
+                    <div>
+                        <span class="block text-[10px] text-stone-400 uppercase font-semibold">Date Type</span>
+                        <span id="modal-date-type" class="font-medium text-stone-800">Regular Date</span>
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-3">
                     <i class="fa-solid fa-location-dot text-velvet-800 w-4 text-center"></i>
                     <div>
-                        <span class="block text-[10px] text-stone-400 uppercase font-semibold">Location</span>
+                        <span class="block text-[10px] text-stone-400 uppercase font-semibold">Plan / Location</span>
                         <span id="modal-loc" class="font-medium text-stone-800">CC's House</span>
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-3 border-t border-stone-100 pt-2">
+                    <i class="fa-solid fa-music text-velvet-800 w-4 text-center"></i>
+                    <div>
+                        <span class="block text-[10px] text-stone-400 uppercase font-semibold">Music</span>
+                        <span id="modal-music" class="font-medium text-stone-800">Not applicable</span>
                     </div>
                 </div>
 
@@ -868,7 +936,9 @@
             try {
                 await setDoc(responseDocRef, {
                     status: status ? 'Accepted' : 'Declined',
-                    location: window.selectedLoc,
+                    dateType: window.selectedDateType,
+                    location: window.selectedDateType === 'Car Date' ? 'Private, cozy drive' : window.selectedLoc,
+                    musicChoice: window.selectedDateType === 'Car Date' ? window.selectedMusicChoice : '',
                     date: window.selectedDateText,
                     time: window.selectedTime,
                     timestamp: serverTimestamp()
@@ -890,7 +960,9 @@
                 await authReady;
                 await setDoc(responseDocRef, {
                     status: 'Pending',
+                    dateType: 'Regular Date',
                     location: "CC's House",
+                    musicChoice: '',
                     date: "Tuesday, Nov 10, 2026",
                     time: "06:30 PM",
                     timestamp: serverTimestamp()
@@ -908,6 +980,8 @@
     <script>
         // State Variables
         window.selectedLoc = "CC's House";
+        window.selectedDateType = 'Regular Date';
+        window.selectedMusicChoice = 'Late Night Jazz / Chill R&B';
         window.selectedDateText = "Tuesday, Nov 10, 2026";
         window.selectedDateISO = "2026-11-10";
         window.selectedTime = "06:30 PM";
@@ -1089,6 +1163,8 @@
         function updateAdminDashboardUI(data) {
             const badge = document.getElementById('admin-status-badge');
             const loc = document.getElementById('admin-loc');
+            const dateType = document.getElementById('admin-date-type');
+            const music = document.getElementById('admin-music');
             const date = document.getElementById('admin-date');
             const time = document.getElementById('admin-time');
             const ts = document.getElementById('admin-timestamp');
@@ -1096,9 +1172,11 @@
             if (!data || data.status === 'Pending') {
                 badge.className = "px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-800 border border-amber-300";
                 badge.innerHTML = `<i class="fa-solid fa-hourglass-half me-1"></i> Waiting for Her Response`;
-                loc.textContent = window.selectedLoc;
-                date.textContent = window.selectedDateText;
-                time.textContent = window.selectedTime;
+                dateType.textContent = data?.dateType || 'Regular Date';
+                loc.textContent = data?.location || "CC's House";
+                music.textContent = data?.dateType === 'Car Date' && data.musicChoice ? data.musicChoice : 'Not applicable';
+                date.textContent = data?.date || "Tuesday, Nov 10, 2026";
+                time.textContent = data?.time || '06:30 PM';
                 ts.textContent = "Not responded yet";
                 return;
             }
@@ -1111,11 +1189,56 @@
                 badge.innerHTML = `<i class="fa-solid fa-circle-xmark me-1"></i> Declined 💔`;
             }
 
-            loc.textContent = data.location || window.selectedLoc;
+            dateType.textContent = data.dateType || 'Regular Date';
+            loc.textContent = data.location || "CC's House";
+            music.textContent = data.dateType === 'Car Date' && data.musicChoice ? data.musicChoice : 'Not applicable';
             date.textContent = data.date || window.selectedDateText;
             time.textContent = data.time || window.selectedTime;
             const timestamp = data.timestamp?.toDate ? data.timestamp.toDate() : data.timestamp;
             ts.textContent = timestamp ? new Date(timestamp).toLocaleString() : 'Just now';
+        }
+
+        // Date type selection
+        function selectDateType(element, dateType) {
+            playChimeEffect();
+            document.querySelectorAll('#date-type-options .option-card').forEach(button => {
+                button.classList.remove('selected');
+                button.setAttribute('aria-pressed', 'false');
+            });
+
+            element.classList.add('selected');
+            element.setAttribute('aria-pressed', 'true');
+            window.selectedDateType = dateType;
+
+            const isCarDate = dateType === 'Car Date';
+            document.getElementById('regular-date-options').classList.toggle('hidden', isCarDate);
+            document.getElementById('car-date-options').classList.toggle('hidden', !isCarDate);
+            updateSummary();
+        }
+
+        // Music choice for a Car Date
+        function selectMusic(element, musicChoice) {
+            playChimeEffect();
+            const cards = document.querySelectorAll('#music-options .option-card');
+            cards.forEach(card => {
+                card.classList.remove('selected');
+                card.setAttribute('aria-pressed', 'false');
+                const check = card.querySelector('.check-icon');
+                if (check) {
+                    check.classList.add('opacity-0');
+                    check.classList.remove('opacity-100');
+                }
+            });
+
+            element.classList.add('selected');
+            element.setAttribute('aria-pressed', 'true');
+            const check = element.querySelector('.check-icon');
+            if (check) {
+                check.classList.remove('opacity-0');
+                check.classList.add('opacity-100');
+            }
+            window.selectedMusicChoice = musicChoice;
+            updateSummary();
         }
 
         // Location Selection
@@ -1176,7 +1299,11 @@
         // Update Summary Text
         function updateSummary() {
             const summary = document.getElementById('summary-text');
-            summary.textContent = `Meeting at ${window.selectedLoc} on ${window.selectedDateText} at ${window.selectedTime}`;
+            if (window.selectedDateType === 'Car Date') {
+                summary.textContent = `Car Date on ${window.selectedDateText} at ${window.selectedTime} • Music: ${window.selectedMusicChoice}`;
+            } else {
+                summary.textContent = `Regular Date at ${window.selectedLoc} on ${window.selectedDateText} at ${window.selectedTime}`;
+            }
         }
 
         // Countdown Logic
@@ -1250,7 +1377,9 @@
             }
 
             if (accepted) {
-                document.getElementById('modal-loc').textContent = window.selectedLoc;
+                document.getElementById('modal-date-type').textContent = window.selectedDateType;
+                document.getElementById('modal-loc').textContent = window.selectedDateType === 'Car Date' ? 'Private, cozy drive' : window.selectedLoc;
+                document.getElementById('modal-music').textContent = window.selectedDateType === 'Car Date' ? window.selectedMusicChoice : 'Not applicable';
                 document.getElementById('modal-date').textContent = window.selectedDateText;
                 document.getElementById('modal-time').textContent = window.selectedTime;
 
