@@ -1,5 +1,5 @@
 // Firebase web app configuration is public client-side configuration, not a secret.
-// Replace these values with the config from Firebase Console > Project settings > Your apps.
+// This public config belongs to the date-invitation-sync Firebase web app.
 window.DATE_INVITATION_FIREBASE_CONFIG = {
     apiKey: "AIzaSyBa9YwOpyVynMcOAmssNTKeRJ1X7b4zjEY",
     authDomain: "date-invitation-sync.firebaseapp.com",
