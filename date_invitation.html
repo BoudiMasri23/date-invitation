@@ -1,0 +1,1303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Love Letter For You | Date Invitation</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        velvet: {
+                            50: '#FDF2F4',
+                            100: '#FCE5E8',
+                            200: '#F7CBD1',
+                            300: '#EE9EA9',
+                            400: '#E06B7C',
+                            500: '#C83B52',
+                            600: '#A4263D',
+                            700: '#841B2E',
+                            800: '#5A0E1A',
+                            900: '#3D0710',
+                            950: '#220308'
+                        },
+                        parchment: '#FAF5EE',
+                        gold: '#D4AF37',
+                        softGold: '#E6CA65',
+                        darkGold: '#A3821A'
+                    },
+                    fontFamily: {
+                        serif: ['"Cormorant Garamond"', 'serif'],
+                        script: ['"Alex Brush"', 'cursive'],
+                        sans: ['"Montserrat"', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        * {
+            -webkit-tap-highlight-color: transparent;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            min-height: 100%;
+            background-color: #1A0407;
+            font-family: 'Montserrat', sans-serif;
+            color: #3A2E2B;
+        }
+
+        /* Envelope scroll lock */
+        body.envelope-active {
+            overflow: hidden !important;
+            height: 100vh !important;
+            touch-action: none;
+        }
+
+        body.envelope-opened {
+            overflow-y: auto !important;
+            height: auto !important;
+            touch-action: auto;
+        }
+
+        /* Velvet Envelope Texture */
+        .velvet-bg {
+            background: radial-gradient(circle at 50% 40%, #68101E 0%, #3D0710 65%, #1F0308 100%);
+            box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.8);
+        }
+
+        .gold-foil-text {
+            background: linear-gradient(135deg, #FFE89C 0%, #D4AF37 45%, #997515 80%, #FDF0B0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 10px rgba(212, 175, 55, 0.2);
+        }
+
+        /* FULL SCREEN VELVET ENVELOPE LANDING PAGE */
+        #envelope-screen {
+            position: fixed;
+            inset: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 50;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), transform 0.8s ease, visibility 0.8s;
+        }
+
+        .envelope-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            max-width: 480px;
+            max-height: 820px;
+            margin: auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            perspective: 1200px;
+        }
+
+        .velvet-envelope {
+            position: relative;
+            width: 90%;
+            height: 86%;
+            max-height: 650px;
+            background: linear-gradient(145deg, #5A0E1A, #35050D);
+            border-radius: 24px;
+            box-shadow: 0 35px 70px rgba(0, 0, 0, 0.85), 0 0 35px rgba(132, 27, 46, 0.4);
+            border: 1.5px solid rgba(212, 175, 55, 0.35);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            overflow: hidden;
+        }
+
+        /* Top Flap */
+        .envelope-top-flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 0;
+            border-left: calc(45vw) solid transparent;
+            border-right: calc(45vw) solid transparent;
+            border-top: 310px solid #6A1221;
+            transform-origin: top center;
+            transition: transform 0.85s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 30;
+            filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.6));
+        }
+
+        @media (min-width: 480px) {
+            .envelope-top-flap {
+                border-left: 220px solid transparent;
+                border-right: 220px solid transparent;
+                border-top: 330px solid #6A1221;
+            }
+        }
+
+        /* Side & Bottom Pocket Flaps */
+        .envelope-pocket-left {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-left: calc(45vw) solid #420812;
+            border-top: 310px solid transparent;
+            z-index: 20;
+            pointer-events: none;
+        }
+
+        .envelope-pocket-right {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 0;
+            height: 0;
+            border-right: calc(45vw) solid #420812;
+            border-top: 310px solid transparent;
+            z-index: 20;
+            pointer-events: none;
+        }
+
+        .envelope-pocket-bottom {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 0;
+            border-left: calc(45vw) solid transparent;
+            border-right: calc(45vw) solid transparent;
+            border-bottom: 230px solid #4D0A16;
+            z-index: 22;
+            pointer-events: none;
+        }
+
+        @media (min-width: 480px) {
+            .envelope-pocket-left { border-left: 220px solid #420812; border-top: 330px solid transparent; }
+            .envelope-pocket-right { border-right: 220px solid #420812; border-top: 330px solid transparent; }
+            .envelope-pocket-bottom { border-left: 220px solid transparent; border-right: 220px solid transparent; border-bottom: 250px solid #4D0A16; }
+        }
+
+        /* Swan Gold Wax Seal */
+        .swan-wax-seal {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 86px;
+            height: 86px;
+            background: radial-gradient(circle at 35% 35%, #FFE58F 0%, #D4AF37 50%, #8A650D 90%);
+            border-radius: 50%;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.75), inset 0 2px 4px rgba(255, 255, 255, 0.8), inset 0 -4px 8px rgba(0, 0, 0, 0.6);
+            z-index: 40;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1.5px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .swan-wax-seal::after {
+            content: '';
+            position: absolute;
+            inset: 6px;
+            border: 1.5px dashed rgba(115, 85, 10, 0.6);
+            border-radius: 50%;
+        }
+
+        /* Inner Letter Peek */
+        .inner-letter-preview {
+            position: absolute;
+            top: 35px;
+            width: 88%;
+            height: 80%;
+            background-color: #FAF5EE;
+            border-radius: 12px;
+            z-index: 10;
+            transition: transform 0.95s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            border: 1px solid #E6CA65;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        /* Unfolding Active State */
+        .velvet-envelope.opened .envelope-top-flap {
+            transform: rotateX(180deg);
+            z-index: 5;
+        }
+
+        .velvet-envelope.opened .swan-wax-seal {
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(1.6);
+            pointer-events: none;
+        }
+
+        .velvet-envelope.opened .inner-letter-preview {
+            transform: translateY(-280px) scale(1.03);
+            z-index: 25;
+        }
+
+        /* Main Parchment Letter Paper */
+        .paper-card {
+            background-color: #FAF5EE;
+            background-image: radial-gradient(#E8DAC4 0.7px, transparent 0.7px);
+            background-size: 14px 14px;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.5), 0 0 30px rgba(212, 175, 55, 0.2);
+        }
+
+        .script-font { font-family: 'Alex Brush', cursive; }
+        .serif-font { font-family: 'Cormorant Garamond', serif; }
+
+        /* Option Cards Selection */
+        .option-card {
+            transition: all 0.25s ease;
+            border: 1.5px solid #EAD8C3;
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+
+        .option-card:hover {
+            border-color: #841B2E;
+            transform: translateY(-2px);
+        }
+
+        .option-card.selected {
+            border-color: #841B2E;
+            background-color: #FDF2F4;
+            box-shadow: 0 6px 20px -3px rgba(132, 27, 46, 0.25);
+        }
+
+        .option-card.selected .check-icon {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* Canvas background overlay */
+        #petals-canvas {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        /* Floating Hearts Animation */
+        @keyframes heartFloatUp {
+            0% {
+                transform: translateY(0) scale(0.6) rotate(0deg);
+                opacity: 0.9;
+            }
+            100% {
+                transform: translateY(-750px) scale(1.25) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .floating-heart {
+            position: fixed;
+            pointer-events: none;
+            z-index: 100;
+            animation: heartFloatUp 4.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+        }
+
+        @keyframes goldGlow {
+            0%, 100% { box-shadow: 0 0 15px rgba(212, 175, 55, 0.4); }
+            50% { box-shadow: 0 0 35px rgba(212, 175, 55, 0.85); }
+        }
+
+        .glow-effect { animation: goldGlow 2.5s infinite; }
+    </style>
+</head>
+<body class="envelope-active flex flex-col items-center justify-start min-h-screen relative">
+
+    <!-- CANVAS FOR ANIMATED ROSE PETALS & PARTICLES -->
+    <canvas id="petals-canvas"></canvas>
+
+    <!-- FLOATING TOP CONTROLS: MUSIC TOGGLE & HOST VIEW ACCESS -->
+    <div class="fixed top-4 right-4 z-50 flex items-center space-x-2">
+        <button id="host-mode-toggle" onclick="toggleAdminView()" aria-label="Host View" class="px-3 h-11 rounded-full bg-velvet-900/90 text-gold border border-gold/50 backdrop-blur-md flex items-center justify-center shadow-xl transition-all active:scale-95 hover:scale-105 text-xs font-semibold">
+            <i class="fa-solid fa-key me-1.5"></i> <span id="host-btn-label">Host View</span>
+        </button>
+        <button id="music-toggle" onclick="toggleAudio()" aria-label="Toggle sound" class="w-11 h-11 rounded-full bg-velvet-900/90 text-gold border border-gold/50 backdrop-blur-md flex items-center justify-center shadow-xl transition-all active:scale-95 hover:scale-105">
+            <i id="music-icon" class="fa-solid fa-volume-xmark text-sm"></i>
+        </button>
+    </div>
+
+    <!-- FULL SCREEN VELVET ENVELOPE LANDING PAGE -->
+    <section id="envelope-screen" class="velvet-bg">
+        <div class="envelope-container">
+            <div id="envelope" class="velvet-envelope" onclick="openEnvelope()">
+                
+                <!-- Envelope Flaps -->
+                <div class="envelope-top-flap"></div>
+                <div class="envelope-pocket-left"></div>
+                <div class="envelope-pocket-right"></div>
+                <div class="envelope-pocket-bottom"></div>
+
+                <!-- Envelope Front Typography -->
+                <div class="absolute z-25 text-center px-6 pointer-events-none transform -translate-y-5">
+                    <p class="serif-font italic text-gold text-xs sm:text-sm tracking-[0.3em] uppercase mb-1">A Love Letter</p>
+                    <h1 class="script-font text-5xl sm:text-6xl gold-foil-text font-bold my-2">Just For You</h1>
+                    <div class="w-12 h-0.5 bg-gold/50 mx-auto rounded-full my-2"></div>
+                    <p class="serif-font italic text-stone-300 text-xs">From Aboud</p>
+                </div>
+
+                <!-- Inner Parchment Letter Peek -->
+                <div class="inner-letter-preview">
+                    <i class="fa-solid fa-heart text-velvet-700 text-2xl mb-2"></i>
+                    <h2 class="serif-font text-velvet-950 font-bold text-2xl tracking-widest uppercase">An Invitation</h2>
+                    <p class="script-font text-3xl text-gold hover:text-darkGold my-1">For a Romantic Evening</p>
+                    <p class="serif-font italic text-stone-600 text-xs mt-2">Aleppo, Syria</p>
+                </div>
+
+                <!-- Swan Embossed Gold Wax Seal -->
+                <div class="swan-wax-seal glow-effect">
+                    <svg class="w-8 h-8 text-velvet-950 drop-shadow" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M13.5 3C12.12 3 11 4.12 11 5.5C11 6.55 11.65 7.45 12.57 7.82C11.16 8.5 9 10.15 9 13C9 13.5 9.1 14 9.3 14.5C8.1 14.1 6.8 14 5.5 14C4.1 14 2.8 14.3 1.6 14.8C1.2 15 1 15.4 1.1 15.8C1.3 16.2 1.7 16.4 2.1 16.3C3.2 15.8 4.3 15.5 5.5 15.5C7.2 15.5 8.8 15.9 10.2 16.7C8.8 18.1 7 19 5 19C3.9 19 2.8 18.7 1.8 18.2C1.4 18 0.9 18.2 0.7 18.6C0.5 19 0.7 19.5 1.1 19.7C2.3 20.3 3.6 20.6 5 20.6C7.6 20.6 10 19.4 11.7 17.5C13.2 18.4 15 19 17 19C19.8 19 22.3 17.8 24 15.9C23.6 15.9 23.2 15.8 22.8 15.7C21.3 17.1 19.3 18 17 18C15.3 18 13.7 17.4 12.4 16.5C14.2 14.8 15.5 12.4 15.9 9.6C16.8 9.2 17.5 8.3 17.5 7.2C17.5 5.7 16.3 4.5 14.8 4.5C14.3 4.5 13.8 4.6 13.5 4.9V3H13.5ZM14.8 6C15.5 6 16 6.5 16 7.2C16 7.9 15.5 8.4 14.8 8.4C14.1 8.4 13.6 7.9 13.6 7.2C13.6 6.5 14.1 6 14.8 6Z"/>
+                    </svg>
+                    <span class="text-[9px] font-bold text-velvet-950 uppercase tracking-widest mt-0.5">OPEN</span>
+                </div>
+
+            </div>
+
+            <p class="text-stone-300 text-xs mt-6 tracking-widest uppercase animate-pulse font-medium">Tap the gold seal to open</p>
+        </div>
+    </section>
+
+    <!-- HOST / ADMIN DASHBOARD VIEW (HIDDEN BY DEFAULT, TOGGLED VIA ?mode=admin OR KEY BUTTON) -->
+    <main id="admin-dashboard" class="w-full max-w-xl paper-card rounded-2xl relative overflow-hidden border-2 border-gold/40 p-5 sm:p-8 my-6 hidden z-20">
+        <header class="text-center border-b border-gold/30 pb-4 mb-4">
+            <span class="bg-velvet-900 text-gold text-[10px] uppercase font-bold tracking-widest px-3 py-1 rounded-full border border-gold/40">Host Live Dashboard</span>
+            <h1 class="script-font text-4xl text-velvet-950 my-1">Response Monitoring</h1>
+            <p class="serif-font italic text-stone-600 text-xs">Real-time update directly from her response</p>
+        </header>
+
+        <div id="admin-status-card" class="bg-white/90 p-5 rounded-xl border border-gold/30 shadow-sm space-y-3 mb-6">
+            <div class="flex items-center justify-between">
+                <span class="text-xs text-stone-500 uppercase font-semibold">Current Response Status:</span>
+                <span id="admin-status-badge" class="px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-800 border border-amber-300">
+                    <i class="fa-solid fa-hourglass-half me-1"></i> Waiting for Her Response
+                </span>
+            </div>
+
+            <div class="grid grid-cols-1 gap-2 pt-2 text-xs sm:text-sm text-stone-700">
+                <div class="flex justify-between border-b border-stone-100 pb-2">
+                    <span class="font-medium text-stone-500"><i class="fa-solid fa-location-dot text-velvet-800 me-2"></i>Location:</span>
+                    <span id="admin-loc" class="font-semibold text-stone-900">CC's House</span>
+                </div>
+                <div class="flex justify-between border-b border-stone-100 pb-2">
+                    <span class="font-medium text-stone-500"><i class="fa-solid fa-calendar text-velvet-800 me-2"></i>Date:</span>
+                    <span id="admin-date" class="font-semibold text-stone-900">Tuesday, Nov 10, 2026</span>
+                </div>
+                <div class="flex justify-between border-b border-stone-100 pb-2">
+                    <span class="font-medium text-stone-500"><i class="fa-solid fa-clock text-velvet-800 me-2"></i>Time:</span>
+                    <span id="admin-time" class="font-semibold text-stone-900">06:30 PM</span>
+                </div>
+                <div class="flex justify-between pt-1">
+                    <span class="font-medium text-stone-500"><i class="fa-solid fa-history text-velvet-800 me-2"></i>Last Updated:</span>
+                    <span id="admin-timestamp" class="font-mono text-xs text-stone-600">Not responded yet</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex items-center justify-between pt-2">
+            <button onclick="toggleAdminView()" class="px-4 py-2 bg-stone-200 hover:bg-stone-300 text-stone-800 rounded-lg text-xs font-semibold">
+                Back to Invitation
+            </button>
+            <button onclick="resetResponseData()" class="px-4 py-2 bg-rose-100 hover:bg-rose-200 text-rose-800 rounded-lg text-xs font-semibold">
+                <i class="fa-solid fa-rotate-left me-1"></i> Reset Status
+            </button>
+        </div>
+    </main>
+
+    <!-- MAIN GUEST INVITATION CONTENT -->
+    <main id="main-invitation" class="w-full max-w-xl paper-card rounded-2xl relative overflow-hidden border-2 border-gold/40 p-5 sm:p-10 my-4 sm:my-8 hidden opacity-0 transition-all duration-1000 z-20">
+
+        <!-- Vintage Corner Accents -->
+        <svg class="absolute top-0 left-0 w-28 sm:w-36 pointer-events-none opacity-80" viewBox="0 0 200 200" fill="none">
+            <path d="M0,0 Q80,20 100,100 Q20,80 0,0 Z" fill="#841B2E" opacity="0.12"/>
+            <path d="M10,0 C40,40 20,80 80,120 M0,30 C50,30 60,70 100,80" stroke="#841B2E" stroke-width="1.5" fill="none"/>
+            <circle cx="80" cy="120" r="4" fill="#D4AF37"/>
+            <circle cx="100" cy="80" r="5" fill="#671423"/>
+        </svg>
+
+        <svg class="absolute top-0 right-0 w-28 sm:w-36 pointer-events-none opacity-80 transform scale-x-[-1]" viewBox="0 0 200 200" fill="none">
+            <path d="M0,0 Q80,20 100,100 Q20,80 0,0 Z" fill="#841B2E" opacity="0.12"/>
+            <path d="M10,0 C40,40 20,80 80,120 M0,30 C50,30 60,70 100,80" stroke="#841B2E" stroke-width="1.5" fill="none"/>
+            <circle cx="80" cy="120" r="4" fill="#D4AF37"/>
+        </svg>
+
+        <!-- HEADER SECTION -->
+        <header class="text-center pt-4 pb-2 relative z-10">
+            <div class="w-16 h-16 mx-auto rounded-full border-2 border-gold/60 flex items-center justify-center mb-3 bg-velvet-50/80 shadow-inner">
+                <i class="fa-solid fa-heart text-velvet-700 text-xl"></i>
+            </div>
+
+            <p class="serif-font italic text-lg sm:text-xl text-velvet-950 max-w-sm mx-auto leading-snug">
+                "I would love nothing more than to spend a wonderful evening together with you."
+            </p>
+
+            <div class="flex items-center justify-center space-x-3 my-4">
+                <span class="h-px w-12 bg-gold/60"></span>
+                <i class="fa-solid fa-crown text-gold text-xs"></i>
+                <span class="h-px w-12 bg-gold/60"></span>
+            </div>
+
+            <h2 class="tracking-[0.25em] text-[11px] font-semibold text-velvet-700 uppercase">You Are Invited On A Date</h2>
+            
+            <h1 class="script-font text-5xl sm:text-6xl text-velvet-900 my-1 leading-tight">
+                From Aboud <span class="serif-font text-2xl font-light text-gold">With Love</span>
+            </h1>
+
+            <p class="serif-font italic text-stone-600 text-sm sm:text-base max-w-md mx-auto mt-2">
+                I would be honored to take you out on a date in Aleppo. Please choose your favorite place, date, and time below!
+            </p>
+        </header>
+
+        <!-- ILLUSTRATED BANNER -->
+        <div class="my-6 relative rounded-xl overflow-hidden border border-gold/40 bg-velvet-50/60 p-4 text-center">
+            <div class="flex items-center justify-center space-x-6 text-velvet-800 opacity-90 my-1">
+                <i class="fa-solid fa-wine-glass text-xl"></i>
+                <i class="fa-solid fa-utensils text-lg"></i>
+                <i class="fa-solid fa-music text-lg"></i>
+                <i class="fa-solid fa-moon-stars text-xl"></i>
+            </div>
+            <p class="serif-font italic text-xs text-stone-600 mt-1">An intimate evening filled with soft candlelight and warm conversation.</p>
+        </div>
+
+        <!-- SELECTION FORM SECTION -->
+        <section class="space-y-6 relative z-10">
+
+            <!-- 1. LOCATION SELECTION -->
+            <div class="bg-white/80 backdrop-blur-sm p-4 sm:p-6 rounded-xl border border-gold/30 shadow-sm">
+                <div class="flex items-center space-x-2 mb-3 text-velvet-900">
+                    <i class="fa-solid fa-location-dot text-gold text-base"></i>
+                    <h3 class="serif-font text-lg sm:text-xl font-bold tracking-wide">1. Where Should We Go?</h3>
+                </div>
+
+                <div class="grid grid-cols-1 gap-2.5" id="location-options">
+                    
+                    <!-- CC's House (Default) -->
+                    <div class="option-card selected p-3.5 rounded-xl cursor-pointer flex items-center justify-between" onclick="selectLocation(this, 'CC\'s House', 'Aleppo, Syria')">
+                        <div class="flex items-start space-x-3">
+                            <div class="w-9 h-9 rounded-full bg-velvet-100 flex items-center justify-center text-velvet-800 shrink-0 mt-0.5">
+                                <i class="fa-solid fa-house-chimney-heart text-base"></i>
+                            </div>
+                            <div>
+                                <div class="flex items-center space-x-2">
+                                    <h4 class="font-semibold text-velvet-950 text-sm">CC's House</h4>
+                                    <span class="bg-velvet-800 text-gold text-[9px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full border border-gold/40">Featured</span>
+                                </div>
+                                <p class="text-xs text-stone-500">Cozy private atmosphere • Aleppo, Syria</p>
+                            </div>
+                        </div>
+                        <div class="check-icon w-5 h-5 rounded-full bg-velvet-800 text-gold flex items-center justify-center text-xs opacity-100 transition-all">
+                            <i class="fa-solid fa-check"></i>
+                        </div>
+                    </div>
+
+                    <!-- Citadel View Cafe -->
+                    <div class="option-card p-3.5 rounded-xl cursor-pointer flex items-center justify-between" onclick="selectLocation(this, 'Citadel View Café', 'Al-Aziziyah, Aleppo')">
+                        <div class="flex items-start space-x-3">
+                            <div class="w-9 h-9 rounded-full bg-stone-100 flex items-center justify-center text-stone-600 shrink-0 mt-0.5">
+                                <i class="fa-solid fa-mug-hot text-base"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-stone-800 text-sm">Citadel View Café</h4>
+                                <p class="text-xs text-stone-500">Al-Aziziyah • Scenic view of historic citadel</p>
+                            </div>
+                        </div>
+                        <div class="check-icon w-5 h-5 rounded-full bg-velvet-800 text-gold flex items-center justify-center text-xs opacity-0 transition-all">
+                            <i class="fa-solid fa-check"></i>
+                        </div>
+                    </div>
+
+                    <!-- Al-Sabil Park Promenade -->
+                    <div class="option-card p-3.5 rounded-xl cursor-pointer flex items-center justify-between" onclick="selectLocation(this, 'Al-Sabil Park Promenade', 'Al-Sabil, Aleppo')">
+                        <div class="flex items-start space-x-3">
+                            <div class="w-9 h-9 rounded-full bg-stone-100 flex items-center justify-center text-stone-600 shrink-0 mt-0.5">
+                                <i class="fa-solid fa-tree text-base"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-stone-800 text-sm">Al-Sabil Park Promenade</h4>
+                                <p class="text-xs text-stone-500">Al-Sabil • Evening walk amidst green gardens</p>
+                            </div>
+                        </div>
+                        <div class="check-icon w-5 h-5 rounded-full bg-velvet-800 text-gold flex items-center justify-center text-xs opacity-0 transition-all">
+                            <i class="fa-solid fa-check"></i>
+                        </div>
+                    </div>
+
+                    <!-- Shahba Street Bistro -->
+                    <div class="option-card p-3.5 rounded-xl cursor-pointer flex items-center justify-between" onclick="selectLocation(this, 'Shahba Street Bistro', 'Shahba St., Aleppo')">
+                        <div class="flex items-start space-x-3">
+                            <div class="w-9 h-9 rounded-full bg-stone-100 flex items-center justify-center text-stone-600 shrink-0 mt-0.5">
+                                <i class="fa-solid fa-utensils text-base"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-stone-800 text-sm">Shahba Street Bistro</h4>
+                                <p class="text-xs text-stone-500">Shahba Street • Gourmet dining &amp; romantic music</p>
+                            </div>
+                        </div>
+                        <div class="check-icon w-5 h-5 rounded-full bg-velvet-800 text-gold flex items-center justify-center text-xs opacity-0 transition-all">
+                            <i class="fa-solid fa-check"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. DATE SELECTION (Nov 10 – Nov 15, 2026) -->
+            <div class="bg-white/80 backdrop-blur-sm p-4 sm:p-6 rounded-xl border border-gold/30 shadow-sm">
+                <div class="flex items-center space-x-2 mb-3 text-velvet-900">
+                    <i class="fa-solid fa-calendar-heart text-gold text-base"></i>
+                    <h3 class="serif-font text-lg sm:text-xl font-bold tracking-wide">2. Choose The Best Day</h3>
+                </div>
+
+                <div class="grid grid-cols-3 sm:grid-cols-6 gap-2" id="date-options">
+                    <button type="button" onclick="selectDate(this, 'Tuesday, Nov 10, 2026', '2026-11-10')" class="option-card selected p-2.5 rounded-xl text-center focus:outline-none">
+                        <span class="block text-[10px] uppercase font-bold text-velvet-800">Tue</span>
+                        <span class="serif-font text-2xl font-bold text-stone-800 block my-0.5">10</span>
+                        <span class="block text-[10px] text-stone-500">Nov</span>
+                    </button>
+                    <button type="button" onclick="selectDate(this, 'Wednesday, Nov 11, 2026', '2026-11-11')" class="option-card p-2.5 rounded-xl text-center focus:outline-none">
+                        <span class="block text-[10px] uppercase font-bold text-stone-500">Wed</span>
+                        <span class="serif-font text-2xl font-bold text-stone-800 block my-0.5">11</span>
+                        <span class="block text-[10px] text-stone-500">Nov</span>
+                    </button>
+                    <button type="button" onclick="selectDate(this, 'Thursday, Nov 12, 2026', '2026-11-12')" class="option-card p-2.5 rounded-xl text-center focus:outline-none">
+                        <span class="block text-[10px] uppercase font-bold text-stone-500">Thu</span>
+                        <span class="serif-font text-2xl font-bold text-stone-800 block my-0.5">12</span>
+                        <span class="block text-[10px] text-stone-500">Nov</span>
+                    </button>
+                    <button type="button" onclick="selectDate(this, 'Friday, Nov 13, 2026', '2026-11-13')" class="option-card p-2.5 rounded-xl text-center focus:outline-none">
+                        <span class="block text-[10px] uppercase font-bold text-stone-500">Fri</span>
+                        <span class="serif-font text-2xl font-bold text-stone-800 block my-0.5">13</span>
+                        <span class="block text-[10px] text-stone-500">Nov</span>
+                    </button>
+                    <button type="button" onclick="selectDate(this, 'Saturday, Nov 14, 2026', '2026-11-14')" class="option-card p-2.5 rounded-xl text-center focus:outline-none">
+                        <span class="block text-[10px] uppercase font-bold text-stone-500">Sat</span>
+                        <span class="serif-font text-2xl font-bold text-stone-800 block my-0.5">14</span>
+                        <span class="block text-[10px] text-stone-500">Nov</span>
+                    </button>
+                    <button type="button" onclick="selectDate(this, 'Sunday, Nov 15, 2026', '2026-11-15')" class="option-card p-2.5 rounded-xl text-center focus:outline-none">
+                        <span class="block text-[10px] uppercase font-bold text-stone-500">Sun</span>
+                        <span class="serif-font text-2xl font-bold text-stone-800 block my-0.5">15</span>
+                        <span class="block text-[10px] text-stone-500">Nov</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 3. TIME SELECTION (6:30 PM - 8:00 PM) -->
+            <div class="bg-white/80 backdrop-blur-sm p-4 sm:p-6 rounded-xl border border-gold/30 shadow-sm">
+                <div class="flex items-center space-x-2 mb-3 text-velvet-900">
+                    <i class="fa-regular fa-clock text-gold text-base"></i>
+                    <h3 class="serif-font text-lg sm:text-xl font-bold tracking-wide">3. Pick A Preferred Time</h3>
+                </div>
+
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5" id="time-options">
+                    <button type="button" onclick="selectTime(this, '06:30 PM')" class="option-card selected p-3 rounded-xl text-center focus:outline-none">
+                        <i class="fa-solid fa-sun-cloud text-xs text-velvet-600 block mb-1"></i>
+                        <span class="font-semibold text-xs sm:text-sm text-stone-800">6:30 PM</span>
+                    </button>
+                    <button type="button" onclick="selectTime(this, '07:00 PM')" class="option-card p-3 rounded-xl text-center focus:outline-none">
+                        <i class="fa-solid fa-moon-stars text-xs text-velvet-600 block mb-1"></i>
+                        <span class="font-semibold text-xs sm:text-sm text-stone-800">7:00 PM</span>
+                    </button>
+                    <button type="button" onclick="selectTime(this, '07:30 PM')" class="option-card p-3 rounded-xl text-center focus:outline-none">
+                        <i class="fa-solid fa-moon text-xs text-velvet-600 block mb-1"></i>
+                        <span class="font-semibold text-xs sm:text-sm text-stone-800">7:30 PM</span>
+                    </button>
+                    <button type="button" onclick="selectTime(this, '08:00 PM')" class="option-card p-3 rounded-xl text-center focus:outline-none">
+                        <i class="fa-solid fa-sparkles text-xs text-velvet-600 block mb-1"></i>
+                        <span class="font-semibold text-xs sm:text-sm text-stone-800">8:00 PM</span>
+                    </button>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- COUNTDOWN TIMER SECTION -->
+        <section class="bg-velvet-900 text-white rounded-xl p-5 text-center my-6 relative overflow-hidden border border-gold/40 shadow-lg">
+            <p class="text-[10px] uppercase tracking-widest font-semibold text-gold mb-2">Counting Down To Our Evening</p>
+
+            <div class="flex justify-center items-center space-x-3 sm:space-x-5 my-1">
+                <div>
+                    <span id="cd-days" class="serif-font text-3xl sm:text-4xl font-bold block leading-none">00</span>
+                    <span class="text-[9px] text-velvet-200 uppercase tracking-wider">Days</span>
+                </div>
+                <span class="serif-font text-2xl text-gold/60">:</span>
+                <div>
+                    <span id="cd-hours" class="serif-font text-3xl sm:text-4xl font-bold block leading-none">00</span>
+                    <span class="text-[9px] text-velvet-200 uppercase tracking-wider">Hours</span>
+                </div>
+                <span class="serif-font text-2xl text-gold/60">:</span>
+                <div>
+                    <span id="cd-mins" class="serif-font text-3xl sm:text-4xl font-bold block leading-none">00</span>
+                    <span class="text-[9px] text-velvet-200 uppercase tracking-wider">Mins</span>
+                </div>
+                <span class="serif-font text-2xl text-gold/60">:</span>
+                <div>
+                    <span id="cd-secs" class="serif-font text-3xl sm:text-4xl font-bold block leading-none">00</span>
+                    <span class="text-[9px] text-velvet-200 uppercase tracking-wider">Secs</span>
+                </div>
+            </div>
+            
+            <p id="summary-text" class="text-xs text-velvet-100 italic mt-3 serif-font">
+                Meeting at CC's House on Tuesday, Nov 10 at 6:30 PM
+            </p>
+        </section>
+
+        <!-- RESPONSE ACTION BUTTONS (ACCEPT & DECLINE) -->
+        <div class="space-y-3 text-center relative z-10 pt-2 pb-4">
+            <button onclick="handleResponse(true)" class="w-full sm:w-auto px-8 py-4 bg-velvet-800 hover:bg-velvet-900 text-gold rounded-full font-semibold tracking-wider text-xs sm:text-sm shadow-xl transition-all duration-300 transform hover:-translate-y-0.5 border border-gold/50 uppercase">
+                <i class="fa-solid fa-heart me-2 text-gold"></i> Yes, I'd Love To! 💖
+            </button>
+            <div>
+                <button onclick="handleResponse(false)" class="text-stone-500 hover:text-stone-700 text-xs italic underline py-2">
+                    I'm sorry, I can't make it 💔
+                </button>
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <footer class="text-center pt-6 border-t border-gold/30 text-stone-600">
+            <p class="serif-font italic text-base text-velvet-900">With all my affection,</p>
+            <p class="script-font text-3xl text-velvet-700 my-0.5">Aboud</p>
+        </footer>
+
+    </main>
+
+    <!-- ACCEPTANCE CONFIRMATION MODAL -->
+    <div id="modal-accept" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300">
+        <div class="paper-card rounded-2xl max-w-md w-full p-6 sm:p-8 text-center relative border-2 border-gold shadow-2xl transform scale-95 transition-transform duration-300" id="accept-card">
+            
+            <div class="w-16 h-16 bg-velvet-100 border border-gold/40 rounded-full flex items-center justify-center mx-auto mb-3 text-velvet-800">
+                <i class="fa-solid fa-heart-circle-check text-3xl"></i>
+            </div>
+
+            <h3 class="script-font text-4xl text-velvet-900 mb-1">It's a Date!</h3>
+            <p class="serif-font italic text-base text-stone-700">I can't wait to spend this wonderful evening with you.</p>
+
+            <div class="my-5 p-4 bg-white/90 rounded-xl border border-gold/30 text-left space-y-2.5 text-xs sm:text-sm">
+                <div class="flex items-center space-x-3">
+                    <i class="fa-solid fa-location-dot text-velvet-800 w-4 text-center"></i>
+                    <div>
+                        <span class="block text-[10px] text-stone-400 uppercase font-semibold">Location</span>
+                        <span id="modal-loc" class="font-medium text-stone-800">CC's House</span>
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-3 border-t border-stone-100 pt-2">
+                    <i class="fa-solid fa-calendar text-velvet-800 w-4 text-center"></i>
+                    <div>
+                        <span class="block text-[10px] text-stone-400 uppercase font-semibold">Date</span>
+                        <span id="modal-date" class="font-medium text-stone-800">Tuesday, Nov 10, 2026</span>
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-3 border-t border-stone-100 pt-2">
+                    <i class="fa-solid fa-clock text-velvet-800 w-4 text-center"></i>
+                    <div>
+                        <span class="block text-[10px] text-stone-400 uppercase font-semibold">Time</span>
+                        <span id="modal-time" class="font-medium text-stone-800">06:30 PM</span>
+                    </div>
+                </div>
+            </div>
+
+            <button onclick="closeModal('modal-accept')" class="w-full py-3 bg-velvet-800 hover:bg-velvet-900 text-gold rounded-xl text-xs font-semibold tracking-wider uppercase border border-gold/40 shadow">
+                Done &amp; Close
+            </button>
+        </div>
+    </div>
+
+    <!-- DECLINE CONFIRMATION MODAL -->
+    <div id="modal-decline" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300">
+        <div class="paper-card rounded-2xl max-w-md w-full p-6 sm:p-8 text-center relative border-2 border-stone-400 shadow-2xl transform scale-95 transition-transform duration-300" id="decline-card">
+            
+            <div class="w-16 h-16 bg-stone-100 border border-stone-300 rounded-full flex items-center justify-center mx-auto mb-3 text-stone-600">
+                <i class="fa-solid fa-heart-crack text-3xl"></i>
+            </div>
+
+            <h3 class="serif-font text-2xl text-stone-900 font-bold mb-1">Response Recorded</h3>
+            <p class="serif-font italic text-sm text-stone-600">Thank you for letting me know. Maybe another time!</p>
+
+            <div class="my-5 p-4 bg-white/90 rounded-xl border border-stone-200 text-xs text-stone-600 italic">
+                Aboud has been notified. If you change your mind, you can reconsider anytime!
+            </div>
+
+            <div class="space-y-2">
+                <button onclick="closeModal('modal-decline')" class="w-full py-3 bg-stone-800 hover:bg-stone-900 text-white rounded-xl text-xs font-semibold uppercase">
+                    Close Window
+                </button>
+                <button onclick="closeModal('modal-decline');" class="w-full py-2.5 text-velvet-700 font-medium text-xs">
+                    Reconsider Date
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- FIREBASE INITIALIZATION & APPLICATION CODE -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Firebase Configuration Setup
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'date-invitation-app';
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
+            apiKey: "AIzaSyDemoPlaceholderOnly",
+            authDomain: "demo-app.firebaseapp.com",
+            projectId: "demo-app",
+            storageBucket: "demo-app.appspot.com",
+            messagingSenderId: "123456789",
+            appId: "1:123456789:web:demo"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        let currentUser = null;
+
+        // Initialize Authentication
+        async function setupAuth() {
+            try {
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(auth);
+                }
+            } catch (err) {
+                console.warn("Auth initialization fallback:", err);
+            }
+        }
+
+        onAuthStateChanged(auth, (user) => {
+            currentUser = user;
+            if (user) {
+                listenToResponseUpdates();
+            }
+        });
+
+        // RULE 1 Compliant Firestore Path: /artifacts/{appId}/public/data/invitation_responses/current_response
+        const responseDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'invitation_responses', 'current_response');
+
+        // Save Response to Firestore
+        window.saveResponseToFirestore = async function(status) {
+            if (!currentUser) return;
+            try {
+                await setDoc(responseDocRef, {
+                    status: status ? 'Accepted' : 'Declined',
+                    location: window.selectedLoc,
+                    date: window.selectedDateText,
+                    time: window.selectedTime,
+                    timestamp: new Date().toISOString()
+                }, { merge: true });
+            } catch (e) {
+                console.error("Error saving response to Firestore:", e);
+            }
+        };
+
+        // Real-time Firestore Listener for Admin Dashboard
+        function listenToResponseUpdates() {
+            onSnapshot(responseDocRef, (snapshot) => {
+                if (snapshot.exists()) {
+                    const data = snapshot.data();
+                    updateAdminDashboardUI(data);
+                } else {
+                    updateAdminDashboardUI(null);
+                }
+            }, (error) => {
+                console.warn("Firestore snapshot error:", error);
+            });
+        }
+
+        window.resetResponseData = async function() {
+            if (!currentUser) return;
+            try {
+                await setDoc(responseDocRef, {
+                    status: 'Pending',
+                    location: "CC's House",
+                    date: "Tuesday, Nov 10, 2026",
+                    time: "06:30 PM",
+                    timestamp: new Date().toISOString()
+                });
+            } catch(e) { console.error(e); }
+        };
+
+        setupAuth();
+    </script>
+
+    <!-- JAVASCRIPT & AUDIO / CANVAS ANIMATIONS -->
+    <script>
+        // State Variables
+        window.selectedLoc = "CC's House";
+        window.selectedDateText = "Tuesday, Nov 10, 2026";
+        window.selectedDateISO = "2026-11-10";
+        window.selectedTime = "06:30 PM";
+
+        let audioCtx = null;
+        let isAudioPlaying = false;
+        let pianoInterval = null;
+
+        function initAudio() {
+            if (!audioCtx) {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                audioCtx = new AudioContext();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+        }
+
+        // Extremely soft glass chime click sound (~0.015 volume)
+        function playChimeEffect() {
+            try {
+                initAudio();
+                const now = audioCtx.currentTime;
+                const freqs = [659.25, 880.00, 1046.50];
+
+                freqs.forEach((freq, idx) => {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    const filter = audioCtx.createBiquadFilter();
+
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(freq, now + idx * 0.04);
+
+                    filter.type = 'lowpass';
+                    filter.frequency.setValueAtTime(1000, now);
+
+                    gain.gain.setValueAtTime(0.0001, now + idx * 0.04);
+                    gain.gain.linearRampToValueAtTime(0.015, now + idx * 0.04 + 0.02);
+                    gain.gain.exponentialRampToValueAtTime(0.0001, now + idx * 0.04 + 0.35);
+
+                    osc.connect(filter);
+                    filter.connect(gain);
+                    gain.connect(audioCtx.destination);
+
+                    osc.start(now + idx * 0.04);
+                    osc.stop(now + idx * 0.04 + 0.4);
+                });
+            } catch(e) { console.log(e); }
+        }
+
+        // Soft Quiet Ambient Piano
+        function playQuietPianoNote(freq, time, duration = 2.5) {
+            if (!audioCtx || !isAudioPlaying) return;
+
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            const filter = audioCtx.createBiquadFilter();
+
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(freq, time);
+
+            filter.type = 'lowpass';
+            filter.frequency.setValueAtTime(600, time);
+
+            gain.gain.setValueAtTime(0.0001, time);
+            gain.gain.linearRampToValueAtTime(0.025, time + 0.04);
+            gain.gain.exponentialRampToValueAtTime(0.0001, time + duration);
+
+            osc.connect(filter);
+            filter.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            osc.start(time);
+            osc.stop(time + duration + 0.1);
+        }
+
+        function startAmbientSound() {
+            try {
+                initAudio();
+                if (isAudioPlaying) return;
+                isAudioPlaying = true;
+                updateAudioIcon();
+
+                const arpeggioNotes = [
+                    293.66, 369.99, 440.00, 554.37,
+                    246.94, 293.66, 369.99, 440.00,
+                    196.00, 246.94, 293.66, 369.99,
+                    220.00, 277.18, 329.63, 440.00
+                ];
+
+                let noteIndex = 0;
+                pianoInterval = setInterval(() => {
+                    if (!isAudioPlaying) return;
+                    const now = audioCtx.currentTime;
+                    playQuietPianoNote(arpeggioNotes[noteIndex], now);
+                    noteIndex = (noteIndex + 1) % arpeggioNotes.length;
+                }, 900);
+
+            } catch(e) { console.log(e); }
+        }
+
+        function toggleAudio() {
+            if (!isAudioPlaying) {
+                startAmbientSound();
+                playChimeEffect();
+            } else {
+                if (pianoInterval) clearInterval(pianoInterval);
+                isAudioPlaying = false;
+                updateAudioIcon();
+            }
+        }
+
+        function updateAudioIcon() {
+            const icon = document.getElementById('music-icon');
+            if (isAudioPlaying) {
+                icon.className = "fa-solid fa-volume-high text-sm text-gold";
+            } else {
+                icon.className = "fa-solid fa-volume-xmark text-sm text-stone-400";
+            }
+        }
+
+        // 3D Envelope Unfolding & Body Scroll Unlock Logic
+        function openEnvelope() {
+            const envelope = document.getElementById('envelope');
+            const envelopeScreen = document.getElementById('envelope-screen');
+            const mainContent = document.getElementById('main-invitation');
+
+            if (envelope.classList.contains('opened')) return;
+
+            playChimeEffect();
+            startAmbientSound();
+
+            envelope.classList.add('opened');
+
+            setTimeout(() => {
+                envelopeScreen.style.opacity = '0';
+                envelopeScreen.style.transform = 'translateY(-20px)';
+                
+                setTimeout(() => {
+                    envelopeScreen.style.visibility = 'hidden';
+                    envelopeScreen.classList.add('hidden');
+                    
+                    document.body.classList.remove('envelope-active');
+                    document.body.classList.add('envelope-opened');
+
+                    mainContent.classList.remove('hidden');
+                    
+                    setTimeout(() => {
+                        mainContent.classList.remove('opacity-0');
+                    }, 50);
+                }, 700);
+            }, 950);
+        }
+
+        // Toggle Host Dashboard View
+        let isAdminView = false;
+        function toggleAdminView() {
+            playChimeEffect();
+            const main = document.getElementById('main-invitation');
+            const admin = document.getElementById('admin-dashboard');
+            const btnLabel = document.getElementById('host-btn-label');
+
+            isAdminView = !isAdminView;
+            if (isAdminView) {
+                main.classList.add('hidden');
+                admin.classList.remove('hidden');
+                btnLabel.textContent = "Guest View";
+                
+                // Allow scrolling if envelope was still closed
+                document.body.classList.remove('envelope-active');
+                document.body.classList.add('envelope-opened');
+            } else {
+                admin.classList.add('hidden');
+                main.classList.remove('hidden');
+                btnLabel.textContent = "Host View";
+            }
+        }
+
+        function updateAdminDashboardUI(data) {
+            const badge = document.getElementById('admin-status-badge');
+            const loc = document.getElementById('admin-loc');
+            const date = document.getElementById('admin-date');
+            const time = document.getElementById('admin-time');
+            const ts = document.getElementById('admin-timestamp');
+
+            if (!data || data.status === 'Pending') {
+                badge.className = "px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-800 border border-amber-300";
+                badge.innerHTML = `<i class="fa-solid fa-hourglass-half me-1"></i> Waiting for Her Response`;
+                loc.textContent = window.selectedLoc;
+                date.textContent = window.selectedDateText;
+                time.textContent = window.selectedTime;
+                ts.textContent = "Not responded yet";
+                return;
+            }
+
+            if (data.status === 'Accepted') {
+                badge.className = "px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-300";
+                badge.innerHTML = `<i class="fa-solid fa-circle-check me-1"></i> YES! Accepted 💖`;
+            } else {
+                badge.className = "px-3 py-1 rounded-full text-xs font-bold bg-rose-100 text-rose-800 border border-rose-300";
+                badge.innerHTML = `<i class="fa-solid fa-circle-xmark me-1"></i> Declined 💔`;
+            }
+
+            loc.textContent = data.location || window.selectedLoc;
+            date.textContent = data.date || window.selectedDateText;
+            time.textContent = data.time || window.selectedTime;
+            ts.textContent = data.timestamp ? new Date(data.timestamp).toLocaleString() : 'Just now';
+        }
+
+        // Location Selection
+        function selectLocation(element, name, subtitle) {
+            playChimeEffect();
+            const container = document.getElementById('location-options');
+            const cards = container.querySelectorAll('.option-card');
+            
+            cards.forEach(card => {
+                card.classList.remove('selected');
+                const check = card.querySelector('.check-icon');
+                if(check) {
+                    check.classList.add('opacity-0');
+                    check.classList.remove('opacity-100');
+                }
+            });
+
+            element.classList.add('selected');
+            const check = element.querySelector('.check-icon');
+            if(check) {
+                check.classList.remove('opacity-0');
+                check.classList.add('opacity-100');
+            }
+
+            window.selectedLoc = name;
+            updateSummary();
+        }
+
+        // Date Selection
+        function selectDate(element, dateText, dateISO) {
+            playChimeEffect();
+            const container = document.getElementById('date-options');
+            const buttons = container.querySelectorAll('button');
+
+            buttons.forEach(btn => btn.classList.remove('selected'));
+            element.classList.add('selected');
+
+            window.selectedDateText = dateText;
+            window.selectedDateISO = dateISO;
+            updateSummary();
+            startCountdown();
+        }
+
+        // Time Selection
+        function selectTime(element, timeStr) {
+            playChimeEffect();
+            const container = document.getElementById('time-options');
+            const buttons = container.querySelectorAll('button');
+
+            buttons.forEach(btn => btn.classList.remove('selected'));
+            element.classList.add('selected');
+
+            window.selectedTime = timeStr;
+            updateSummary();
+            startCountdown();
+        }
+
+        // Update Summary Text
+        function updateSummary() {
+            const summary = document.getElementById('summary-text');
+            summary.textContent = `Meeting at ${window.selectedLoc} on ${window.selectedDateText} at ${window.selectedTime}`;
+        }
+
+        // Countdown Logic
+        let timerInterval = null;
+        function startCountdown() {
+            if (timerInterval) clearInterval(timerInterval);
+
+            let [time, modifier] = window.selectedTime.split(' ');
+            let [hours, minutes] = time.split(':');
+            if (modifier === 'PM' && hours !== '12') hours = parseInt(hours, 10) + 12;
+            if (modifier === 'AM' && hours === '12') hours = '00';
+
+            const targetDateStr = `${window.selectedDateISO}T${hours}:${minutes}:00`;
+            const targetDate = new Date(targetDateStr).getTime();
+
+            function update() {
+                const now = new Date().getTime();
+                const diff = targetDate - now;
+
+                if (diff <= 0) {
+                    document.getElementById('cd-days').innerText = '00';
+                    document.getElementById('cd-hours').innerText = '00';
+                    document.getElementById('cd-mins').innerText = '00';
+                    document.getElementById('cd-secs').innerText = '00';
+                    return;
+                }
+
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hoursVal = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const secs = Math.floor((diff % (1000 * 60)) / 1000);
+
+                document.getElementById('cd-days').innerText = String(days).padStart(2, '0');
+                document.getElementById('cd-hours').innerText = String(hoursVal).padStart(2, '0');
+                document.getElementById('cd-mins').innerText = String(mins).padStart(2, '0');
+                document.getElementById('cd-secs').innerText = String(secs).padStart(2, '0');
+            }
+
+            update();
+            timerInterval = setInterval(update, 1000);
+        }
+
+        // Floating Hearts Particle Effect
+        function spawnHearts() {
+            const heartSymbols = ['❤️', '💖', '✨', '🌹', '💕'];
+            for (let i = 0; i < 25; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.className = 'floating-heart text-2xl';
+                    heart.innerText = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
+                    heart.style.left = (Math.random() * 85 + 5) + 'vw';
+                    heart.style.bottom = '-30px';
+                    heart.style.animationDuration = (Math.random() * 2 + 3) + 's';
+                    document.body.appendChild(heart);
+
+                    setTimeout(() => heart.remove(), 4500);
+                }, i * 120);
+            }
+        }
+
+        // Confirm RSVP (Accept / Decline)
+        function handleResponse(accepted) {
+            playChimeEffect();
+
+            if (window.saveResponseToFirestore) {
+                window.saveResponseToFirestore(accepted);
+            }
+
+            if (accepted) {
+                document.getElementById('modal-loc').textContent = window.selectedLoc;
+                document.getElementById('modal-date').textContent = window.selectedDateText;
+                document.getElementById('modal-time').textContent = window.selectedTime;
+
+                const modal = document.getElementById('modal-accept');
+                const modalCard = document.getElementById('accept-card');
+
+                modal.classList.remove('hidden');
+                setTimeout(() => {
+                    modal.classList.remove('opacity-0');
+                    modalCard.classList.remove('scale-95');
+                    modalCard.classList.add('scale-100');
+                }, 10);
+
+                spawnHearts();
+            } else {
+                const modal = document.getElementById('modal-decline');
+                const modalCard = document.getElementById('decline-card');
+
+                modal.classList.remove('hidden');
+                setTimeout(() => {
+                    modal.classList.remove('opacity-0');
+                    modalCard.classList.remove('scale-95');
+                    modalCard.classList.add('scale-100');
+                }, 10);
+            }
+        }
+
+        function closeModal(id) {
+            playChimeEffect();
+            const modal = document.getElementById(id);
+            const card = modal.querySelector('div');
+
+            modal.classList.add('opacity-0');
+            card.classList.remove('scale-100');
+            card.classList.add('scale-95');
+
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        // Rose Petal Background Canvas Animation
+        function initPetalsCanvas() {
+            const canvas = document.getElementById('petals-canvas');
+            const ctx = canvas.getContext('2d');
+            let width = canvas.width = window.innerWidth;
+            let height = canvas.height = window.innerHeight;
+
+            window.addEventListener('resize', () => {
+                width = canvas.width = window.innerWidth;
+                height = canvas.height = window.innerHeight;
+            });
+
+            const petals = Array.from({ length: 30 }, () => ({
+                x: Math.random() * width,
+                y: Math.random() * height,
+                size: Math.random() * 6 + 4,
+                speedY: Math.random() * 0.8 + 0.3,
+                speedX: Math.random() * 0.5 - 0.25,
+                angle: Math.random() * Math.PI * 2,
+                spin: (Math.random() - 0.5) * 0.02,
+                opacity: Math.random() * 0.4 + 0.3
+            }));
+
+            function animate() {
+                ctx.clearRect(0, 0, width, height);
+                petals.forEach(p => {
+                    p.y += p.speedY;
+                    p.x += Math.sin(p.angle) * 0.5;
+                    p.angle += p.spin;
+
+                    if (p.y > height) {
+                        p.y = -10;
+                        p.x = Math.random() * width;
+                    }
+
+                    ctx.save();
+                    ctx.translate(p.x, p.y);
+                    ctx.rotate(p.angle);
+                    ctx.fillStyle = `rgba(164, 38, 61, ${p.opacity})`;
+                    ctx.beginPath();
+                    ctx.ellipse(0, 0, p.size, p.size * 1.6, 0, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.restore();
+                });
+                requestAnimationFrame(animate);
+            }
+            animate();
+        }
+
+        window.onload = function() {
+            startCountdown();
+            initPetalsCanvas();
+
+            // Check URL for mode=admin
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('mode') === 'admin') {
+                toggleAdminView();
+            }
+        }
+    </script>
+</body>
+</html>
