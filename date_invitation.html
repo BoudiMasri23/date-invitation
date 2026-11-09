@@ -398,6 +398,7 @@
             <span class="bg-velvet-900 text-gold text-[10px] uppercase font-bold tracking-widest px-3 py-1 rounded-full border border-gold/40">Host Live Dashboard</span>
             <h1 class="script-font text-4xl text-velvet-950 my-1">Response Monitoring</h1>
             <p class="serif-font italic text-stone-600 text-xs">Real-time update directly from her response</p>
+            <p id="firebase-sync-status" class="text-xs text-stone-500 mt-2" role="status" aria-live="polite">Connecting to response service…</p>
         </header>
 
         <div id="admin-status-card" class="bg-white/90 p-5 rounded-xl border border-gold/30 shadow-sm space-y-3 mb-6">
@@ -765,30 +766,62 @@
     </div>
 
     <!-- FIREBASE INITIALIZATION & APPLICATION CODE -->
+    <script src="./firebase-config.js"></script>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // Firebase Configuration Setup
+        // Supply the Firebase web app config from Firebase Console before deploying.
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'date-invitation-app';
-        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
-            apiKey: "AIzaSyDemoPlaceholderOnly",
-            authDomain: "demo-app.firebaseapp.com",
-            projectId: "demo-app",
-            storageBucket: "demo-app.appspot.com",
-            messagingSenderId: "123456789",
-            appId: "1:123456789:web:demo"
-        };
+        let firebaseConfig = null;
+        try {
+            firebaseConfig = typeof __firebase_config !== 'undefined'
+                ? JSON.parse(__firebase_config)
+                : (window.DATE_INVITATION_FIREBASE_CONFIG || null);
+        } catch (error) {
+            console.error('Firebase config is not valid JSON:', error);
+        }
 
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-
+        const hasFirebaseConfig = firebaseConfig &&
+            ['apiKey', 'authDomain', 'projectId', 'appId'].every((key) =>
+                typeof firebaseConfig[key] === 'string' &&
+                firebaseConfig[key].trim() &&
+                !firebaseConfig[key].includes('YOUR_')
+            );
+        const app = hasFirebaseConfig ? initializeApp(firebaseConfig) : null;
+        const auth = app ? getAuth(app) : null;
+        const db = app ? getFirestore(app) : null;
         let currentUser = null;
+        let unsubscribeResponse = null;
+        let resolveAuthReady;
+        let rejectAuthReady;
+        const authReady = new Promise((resolve, reject) => {
+            resolveAuthReady = resolve;
+            rejectAuthReady = reject;
+        });
+        authReady.catch(() => {});
+
+        function setSyncStatus(message, isError = false) {
+            const status = document.getElementById('firebase-sync-status');
+            if (!status) return;
+            status.textContent = message;
+            status.classList.toggle('text-rose-700', isError);
+            status.classList.toggle('text-stone-500', !isError);
+        }
+
+        const responseDocRef = db
+            ? doc(db, 'artifacts', appId, 'public', 'data', 'invitation_responses', 'current_response')
+            : null;
 
         // Initialize Authentication
         async function setupAuth() {
+            if (!hasFirebaseConfig) {
+                const error = new Error('Firebase is not configured. Add the web app config and enable Anonymous sign-in and Firestore; see FIREBASE_SETUP.md.');
+                setSyncStatus('Sync is not configured. See FIREBASE_SETUP.md.', true);
+                rejectAuthReady(error);
+                return;
+            }
             try {
                 if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
                     await signInWithCustomToken(auth, __initial_auth_token);
@@ -796,61 +829,76 @@
                     await signInAnonymously(auth);
                 }
             } catch (err) {
-                console.warn("Auth initialization fallback:", err);
+                console.error('Firebase authentication failed:', err);
+                setSyncStatus('Could not connect to Firebase. Check the setup and Firestore rules.', true);
+                rejectAuthReady(err);
             }
         }
 
-        onAuthStateChanged(auth, (user) => {
-            currentUser = user;
-            if (user) {
-                listenToResponseUpdates();
-            }
-        });
+        // Every device reads and writes this same Firestore document.
+        function listenToResponseUpdates() {
+            if (!currentUser || !responseDocRef || unsubscribeResponse) return;
+            unsubscribeResponse = onSnapshot(responseDocRef, (snapshot) => {
+                updateAdminDashboardUI(snapshot.exists() ? snapshot.data() : null);
+                setSyncStatus('Live — listening for guest responses.');
+            }, (error) => {
+                console.error('Firestore listener failed:', error);
+                setSyncStatus('Live updates failed. Check Firestore rules and project setup.', true);
+            });
+        }
 
-        // RULE 1 Compliant Firestore Path: /artifacts/{appId}/public/data/invitation_responses/current_response
-        const responseDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'invitation_responses', 'current_response');
+        if (auth) {
+            onAuthStateChanged(auth, (user) => {
+                currentUser = user;
+                if (user) {
+                    resolveAuthReady(user);
+                    listenToResponseUpdates();
+                }
+            }, (error) => {
+                rejectAuthReady(error);
+                setSyncStatus('Firebase authentication failed.', true);
+            });
+        }
 
         // Save Response to Firestore
         window.saveResponseToFirestore = async function(status) {
-            if (!currentUser) return;
+            if (!responseDocRef) throw new Error('Response sync is not configured.');
+            await authReady;
+            if (!currentUser) throw new Error('Not connected to Firebase.');
             try {
                 await setDoc(responseDocRef, {
                     status: status ? 'Accepted' : 'Declined',
                     location: window.selectedLoc,
                     date: window.selectedDateText,
                     time: window.selectedTime,
-                    timestamp: new Date().toISOString()
+                    timestamp: serverTimestamp()
                 }, { merge: true });
+                setSyncStatus('Response saved — host view will update live.');
             } catch (e) {
-                console.error("Error saving response to Firestore:", e);
+                console.error('Error saving response to Firestore:', e);
+                setSyncStatus('Could not save your response. Check Firestore rules.', true);
+                throw e;
             }
         };
 
-        // Real-time Firestore Listener for Admin Dashboard
-        function listenToResponseUpdates() {
-            onSnapshot(responseDocRef, (snapshot) => {
-                if (snapshot.exists()) {
-                    const data = snapshot.data();
-                    updateAdminDashboardUI(data);
-                } else {
-                    updateAdminDashboardUI(null);
-                }
-            }, (error) => {
-                console.warn("Firestore snapshot error:", error);
-            });
-        }
-
         window.resetResponseData = async function() {
-            if (!currentUser) return;
+            if (!responseDocRef) {
+                setSyncStatus('Sync is not configured. See FIREBASE_SETUP.md.', true);
+                return;
+            }
             try {
+                await authReady;
                 await setDoc(responseDocRef, {
                     status: 'Pending',
                     location: "CC's House",
                     date: "Tuesday, Nov 10, 2026",
                     time: "06:30 PM",
-                    timestamp: new Date().toISOString()
+                    timestamp: serverTimestamp()
                 });
-            } catch(e) { console.error(e); }
+            } catch (error) {
+                console.error('Could not reset response:', error);
+                setSyncStatus('Could not reset the response. Check Firestore rules.', true);
+            }
         };
 
         setupAuth();
@@ -1066,7 +1114,8 @@
             loc.textContent = data.location || window.selectedLoc;
             date.textContent = data.date || window.selectedDateText;
             time.textContent = data.time || window.selectedTime;
-            ts.textContent = data.timestamp ? new Date(data.timestamp).toLocaleString() : 'Just now';
+            const timestamp = data.timestamp?.toDate ? data.timestamp.toDate() : data.timestamp;
+            ts.textContent = timestamp ? new Date(timestamp).toLocaleString() : 'Just now';
         }
 
         // Location Selection
@@ -1189,11 +1238,15 @@
         }
 
         // Confirm RSVP (Accept / Decline)
-        function handleResponse(accepted) {
+        async function handleResponse(accepted) {
             playChimeEffect();
 
             if (window.saveResponseToFirestore) {
-                window.saveResponseToFirestore(accepted);
+                try {
+                    await window.saveResponseToFirestore(accepted);
+                } catch (error) {
+                    alert('Your selection could not be sent to the host. Please try again later.');
+                }
             }
 
             if (accepted) {
