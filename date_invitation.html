@@ -75,20 +75,14 @@
             touch-action: auto;
         }
 
-        /* Velvet Envelope Texture */
+        /* Textured, minimalist envelope landing */
         .velvet-bg {
-            background: radial-gradient(circle at 50% 40%, #68101E 0%, #3D0710 65%, #1F0308 100%);
-            box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.8);
+            background:
+                radial-gradient(ellipse at 50% 42%, rgba(108, 76, 52, 0.28), transparent 58%),
+                radial-gradient(ellipse at 50% 110%, #090b10 0%, #131720 58%, #1a2028 100%);
+            box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.48);
         }
 
-        .gold-foil-text {
-            background: linear-gradient(135deg, #FFE89C 0%, #D4AF37 45%, #997515 80%, #FDF0B0 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 2px 10px rgba(212, 175, 55, 0.2);
-        }
-
-        /* FULL SCREEN VELVET ENVELOPE LANDING PAGE */
         #envelope-screen {
             position: fixed;
             inset: 0;
@@ -100,148 +94,126 @@
             align-items: center;
             justify-content: center;
             overflow: hidden;
-            transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), transform 0.8s ease, visibility 0.8s;
+            transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1), transform 0.9s cubic-bezier(0.22, 1, 0.36, 1), visibility 0.9s;
         }
 
         .envelope-container {
             position: relative;
-            width: 100vw;
-            height: 100vh;
-            max-width: 480px;
-            max-height: 820px;
+            width: min(88vw, 460px);
+            height: min(72vh, 590px);
+            min-height: 360px;
             margin: auto;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            perspective: 1200px;
+            perspective: 1600px;
         }
 
         .velvet-envelope {
             position: relative;
-            width: 90%;
-            height: 86%;
-            max-height: 650px;
-            background: linear-gradient(145deg, #5A0E1A, #35050D);
-            border-radius: 24px;
-            box-shadow: 0 35px 70px rgba(0, 0, 0, 0.85), 0 0 35px rgba(132, 27, 46, 0.4);
-            border: 1.5px solid rgba(212, 175, 55, 0.35);
+            width: 100%;
+            height: 100%;
+            isolation: isolate;
+            transform-style: preserve-3d;
+            background:
+                radial-gradient(ellipse at 50% 15%, rgba(255,255,255,0.12), transparent 48%),
+                radial-gradient(ellipse at 50% 100%, rgba(0,0,0,0.35), transparent 54%),
+                linear-gradient(145deg, #323944 0%, #1d232c 48%, #11161e 100%);
+            border-radius: 22px;
+            box-shadow: 0 36px 80px rgba(0,0,0,0.48), 0 12px 30px rgba(0,0,0,0.26), inset 0 1px 0 rgba(255,255,255,0.22), inset 0 -1px 0 rgba(255,255,255,0.08);
+            border: 1px solid rgba(232,213,173,0.28);
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
-            cursor: pointer;
             overflow: hidden;
+            cursor: default;
+            transition: transform 1.2s cubic-bezier(0.22,1,0.36,1), box-shadow 1.2s cubic-bezier(0.22,1,0.36,1);
         }
 
-        /* Top Flap */
+        .velvet-envelope::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            pointer-events: none;
+            background: repeating-linear-gradient(112deg, transparent 0 3px, rgba(255,255,255,0.012) 4px, transparent 5px 8px), radial-gradient(ellipse at 25% 35%, rgba(255,255,255,0.07), transparent 42%);
+            opacity: 0.72;
+        }
+
         .envelope-top-flap {
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
-            height: 0;
-            border-left: calc(45vw) solid transparent;
-            border-right: calc(45vw) solid transparent;
-            border-top: 310px solid #6A1221;
+            height: 61%;
+            clip-path: polygon(0 0, 100% 0, 50% 58%);
+            background: radial-gradient(ellipse at 50% 4%, rgba(255,255,255,0.13), transparent 68%), linear-gradient(160deg, #3a424c, #222933 60%, #171d25);
             transform-origin: top center;
-            transition: transform 0.85s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-style: preserve-3d;
+            backface-visibility: hidden;
+            transition: transform 1.2s cubic-bezier(0.22,1,0.36,1), filter 1.2s ease;
             z-index: 30;
-            filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.6));
-        }
-
-        @media (min-width: 480px) {
-            .envelope-top-flap {
-                border-left: 220px solid transparent;
-                border-right: 220px solid transparent;
-                border-top: 330px solid #6A1221;
-            }
-        }
-
-        /* Side & Bottom Pocket Flaps */
-        .envelope-pocket-left {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0;
-            height: 0;
-            border-left: calc(45vw) solid #420812;
-            border-top: 310px solid transparent;
-            z-index: 20;
+            filter: drop-shadow(0 12px 14px rgba(0,0,0,0.24));
             pointer-events: none;
         }
 
-        .envelope-pocket-right {
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            width: 0;
-            height: 0;
-            border-right: calc(45vw) solid #420812;
-            border-top: 310px solid transparent;
-            z-index: 20;
-            pointer-events: none;
-        }
+        .envelope-pocket-left, .envelope-pocket-right { display: none; }
 
         .envelope-pocket-bottom {
             position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 0;
-            border-left: calc(45vw) solid transparent;
-            border-right: calc(45vw) solid transparent;
-            border-bottom: 230px solid #4D0A16;
+            inset: auto 0 0;
+            height: 62%;
+            clip-path: polygon(0 0, 50% 55%, 100% 0, 100% 100%, 0 100%);
+            background: radial-gradient(ellipse at 50% 100%, rgba(0,0,0,0.34), transparent 62%), linear-gradient(145deg, #252c35, #171d25);
             z-index: 22;
             pointer-events: none;
         }
 
-        @media (min-width: 480px) {
-            .envelope-pocket-left { border-left: 220px solid #420812; border-top: 330px solid transparent; }
-            .envelope-pocket-right { border-right: 220px solid #420812; border-top: 330px solid transparent; }
-            .envelope-pocket-bottom { border-left: 220px solid transparent; border-right: 220px solid transparent; border-bottom: 250px solid #4D0A16; }
-        }
-
-        /* Swan Gold Wax Seal */
         .swan-wax-seal {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 86px;
-            height: 86px;
-            background: radial-gradient(circle at 35% 35%, #FFE58F 0%, #D4AF37 50%, #8A650D 90%);
+            width: 88px;
+            height: 88px;
+            padding: 0;
+            background: radial-gradient(circle at 34% 28%, #fff1bd 0%, #e8c86b 28%, #bf9634 63%, #82631f 100%);
             border-radius: 50%;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.75), inset 0 2px 4px rgba(255, 255, 255, 0.8), inset 0 -4px 8px rgba(0, 0, 0, 0.6);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.46), inset 0 2px 4px rgba(255,255,255,0.8), inset 0 -4px 8px rgba(0,0,0,0.4);
             z-index: 40;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-            border: 1.5px solid rgba(255, 255, 255, 0.5);
+            transition: opacity 0.45s ease, transform 0.8s cubic-bezier(0.22,1,0.36,1), filter 0.8s ease;
+            border: 1px solid rgba(255,255,255,0.62);
+            filter: drop-shadow(0 9px 13px rgba(0,0,0,0.32));
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+            font: inherit;
         }
 
         .swan-wax-seal::after {
             content: '';
             position: absolute;
             inset: 6px;
-            border: 1.5px dashed rgba(115, 85, 10, 0.6);
+            border: 1px solid rgba(115,85,10,0.46);
             border-radius: 50%;
         }
 
-        /* Inner Letter Peek */
         .inner-letter-preview {
             position: absolute;
-            top: 35px;
+            top: 8%;
             width: 88%;
             height: 80%;
             background-color: #FAF5EE;
             border-radius: 12px;
             z-index: 10;
-            transition: transform 0.95s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-            border: 1px solid #E6CA65;
+            transition: transform 1.15s cubic-bezier(0.22,1,0.36,1), box-shadow 1.15s ease;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.24);
+            border: 1px solid rgba(212,175,55,0.7);
             padding: 24px;
             display: flex;
             flex-direction: column;
@@ -250,55 +222,81 @@
             text-align: center;
         }
 
-        /* Unfolding Active State */
         .velvet-envelope.opened .envelope-top-flap {
-            transform: rotateX(180deg);
+            transform: rotateX(-178deg);
             z-index: 5;
+            filter: drop-shadow(0 18px 18px rgba(0,0,0,0.18));
         }
-
         .velvet-envelope.opened .swan-wax-seal {
             opacity: 0;
-            transform: translate(-50%, -50%) scale(1.6);
+            transform: translate(-50%,-50%) scale(1.45) rotate(-18deg);
+            filter: blur(2px);
             pointer-events: none;
         }
-
         .velvet-envelope.opened .inner-letter-preview {
-            transform: translateY(-280px) scale(1.03);
+            transform: translateY(-20%) scale(1.025);
             z-index: 25;
+            box-shadow: 0 24px 44px rgba(0,0,0,0.28);
         }
 
-        /* Main Parchment Letter Paper */
+        @media (max-width: 480px) {
+            .envelope-container { height: min(68vh, 540px); min-height: 360px; }
+            .inner-letter-preview { padding: 18px; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            #envelope-screen, .velvet-envelope, .envelope-top-flap, .swan-wax-seal, .inner-letter-preview { transition-duration: 0.01ms !important; }
+            .song-row { animation: none; }
+        }
+
         .paper-card {
             background-color: #FAF5EE;
             background-image: radial-gradient(#E8DAC4 0.7px, transparent 0.7px);
             background-size: 14px 14px;
-            box-shadow: 0 25px 60px rgba(0,0,0,0.5), 0 0 30px rgba(212, 175, 55, 0.2);
+            box-shadow: 0 25px 60px rgba(0,0,0,0.5), 0 0 30px rgba(212,175,55,0.2);
         }
-
         .script-font { font-family: 'Alex Brush', cursive; }
         .serif-font { font-family: 'Cormorant Garamond', serif; }
 
-        /* Option Cards Selection */
         .option-card {
             transition: all 0.25s ease;
             border: 1.5px solid #EAD8C3;
-            background-color: rgba(255, 255, 255, 0.9);
+            background-color: rgba(255,255,255,0.9);
         }
-
-        .option-card:hover {
-            border-color: #841B2E;
-            transform: translateY(-2px);
-        }
-
+        .option-card:hover { border-color: #841B2E; transform: translateY(-2px); }
         .option-card.selected {
             border-color: #841B2E;
             background-color: #FDF2F4;
-            box-shadow: 0 6px 20px -3px rgba(132, 27, 46, 0.25);
+            box-shadow: 0 6px 20px -3px rgba(132,27,46,0.25);
         }
+        .option-card.selected .check-icon { opacity: 1; }
 
-        .option-card.selected .check-icon {
-            opacity: 1;
-            transform: scale(1);
+        .song-list { counter-reset: song; }
+        .song-row { counter-increment: song; animation: songRowEnter 320ms cubic-bezier(0.22,1,0.36,1) both; }
+        .song-label { display: flex; align-items: center; gap: 0.75rem; }
+        .song-number {
+            width: 1.75rem;
+            flex: 0 0 1.75rem;
+            text-align: right;
+            color: #5A0E1A;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.15rem;
+            font-weight: 700;
+        }
+        .song-input {
+            width: 100%;
+            border: 1px solid #EAD8C3;
+            border-radius: 0.75rem;
+            background: rgba(255,255,255,0.92);
+            color: #3A2E2B;
+            padding: 0.72rem 0.9rem;
+            font: 500 0.8rem 'Montserrat', sans-serif;
+            outline: none;
+            transition: border-color 180ms ease, box-shadow 180ms ease, background 180ms ease;
+        }
+        .song-input:focus { border-color: #841B2E; background: #fff; box-shadow: 0 0 0 3px rgba(132,27,46,0.12); }
+        @keyframes songRowEnter {
+            from { opacity: 0; transform: translateY(-7px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         /* Canvas background overlay */
@@ -354,7 +352,7 @@
     <!-- FULL SCREEN VELVET ENVELOPE LANDING PAGE -->
     <section id="envelope-screen" class="velvet-bg">
         <div class="envelope-container">
-            <div id="envelope" class="velvet-envelope" onclick="openEnvelope()">
+            <div id="envelope" class="velvet-envelope">
                 
                 <!-- Envelope Flaps -->
                 <div class="envelope-top-flap"></div>
@@ -362,33 +360,23 @@
                 <div class="envelope-pocket-right"></div>
                 <div class="envelope-pocket-bottom"></div>
 
-                <!-- Envelope Front Typography -->
-                <div class="absolute z-25 text-center px-6 pointer-events-none transform -translate-y-5">
-                    <p class="serif-font italic text-gold text-xs sm:text-sm tracking-[0.3em] uppercase mb-1">A Love Letter</p>
-                    <h1 class="script-font text-5xl sm:text-6xl gold-foil-text font-bold my-2">Just For You</h1>
-                    <div class="w-12 h-0.5 bg-gold/50 mx-auto rounded-full my-2"></div>
-                    <p class="serif-font italic text-stone-300 text-xs">From Aboud</p>
-                </div>
-
                 <!-- Inner Parchment Letter Peek -->
                 <div class="inner-letter-preview">
-                    <i class="fa-solid fa-heart text-velvet-700 text-2xl mb-2"></i>
-                    <h2 class="serif-font text-velvet-950 font-bold text-2xl tracking-widest uppercase">An Invitation</h2>
-                    <p class="script-font text-3xl text-gold hover:text-darkGold my-1">For a Romantic Evening</p>
-                    <p class="serif-font italic text-stone-600 text-xs mt-2">Aleppo, Syria</p>
+                    <span class="w-14 h-14 rounded-full border border-gold/50 flex items-center justify-center text-gold/80 shadow-inner">
+                        <i class="fa-solid fa-heart text-xl"></i>
+                    </span>
                 </div>
 
                 <!-- Swan Embossed Gold Wax Seal -->
-                <div class="swan-wax-seal glow-effect">
+                <button type="button" class="swan-wax-seal" aria-label="Open the invitation" onclick="openEnvelope(event)">
                     <svg class="w-8 h-8 text-velvet-950 drop-shadow" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M13.5 3C12.12 3 11 4.12 11 5.5C11 6.55 11.65 7.45 12.57 7.82C11.16 8.5 9 10.15 9 13C9 13.5 9.1 14 9.3 14.5C8.1 14.1 6.8 14 5.5 14C4.1 14 2.8 14.3 1.6 14.8C1.2 15 1 15.4 1.1 15.8C1.3 16.2 1.7 16.4 2.1 16.3C3.2 15.8 4.3 15.5 5.5 15.5C7.2 15.5 8.8 15.9 10.2 16.7C8.8 18.1 7 19 5 19C3.9 19 2.8 18.7 1.8 18.2C1.4 18 0.9 18.2 0.7 18.6C0.5 19 0.7 19.5 1.1 19.7C2.3 20.3 3.6 20.6 5 20.6C7.6 20.6 10 19.4 11.7 17.5C13.2 18.4 15 19 17 19C19.8 19 22.3 17.8 24 15.9C23.6 15.9 23.2 15.8 22.8 15.7C21.3 17.1 19.3 18 17 18C15.3 18 13.7 17.4 12.4 16.5C14.2 14.8 15.5 12.4 15.9 9.6C16.8 9.2 17.5 8.3 17.5 7.2C17.5 5.7 16.3 4.5 14.8 4.5C14.3 4.5 13.8 4.6 13.5 4.9V3H13.5ZM14.8 6C15.5 6 16 6.5 16 7.2C16 7.9 15.5 8.4 14.8 8.4C14.1 8.4 13.6 7.9 13.6 7.2C13.6 6.5 14.1 6 14.8 6Z"/>
                     </svg>
-                    <span class="text-[9px] font-bold text-velvet-950 uppercase tracking-widest mt-0.5">OPEN</span>
-                </div>
+                </button>
 
             </div>
 
-            <p class="text-stone-300 text-xs mt-6 tracking-widest uppercase animate-pulse font-medium">Tap the gold seal to open</p>
+            <p class="text-stone-300 text-xs mt-6 tracking-widest uppercase animate-pulse font-medium">Tap the gold seal</p>
         </div>
     </section>
 
@@ -418,9 +406,9 @@
                     <span class="font-medium text-stone-500"><i class="fa-solid fa-location-dot text-velvet-800 me-2"></i>Plan / Location:</span>
                     <span id="admin-loc" class="font-semibold text-stone-900">CC's House</span>
                 </div>
-                <div class="flex justify-between border-b border-stone-100 pb-2">
-                    <span class="font-medium text-stone-500"><i class="fa-solid fa-music text-velvet-800 me-2"></i>Music:</span>
-                    <span id="admin-music" class="font-semibold text-stone-900">Not applicable</span>
+                <div id="admin-songs-row" class="border-b border-stone-100 pb-2 hidden">
+                    <span class="font-medium text-stone-500"><i class="fa-solid fa-music text-velvet-800 me-2"></i>Ride Playlist:</span>
+                    <ol id="admin-songs" class="list-decimal list-inside font-semibold text-stone-900 space-y-1 mt-2"></ol>
                 </div>
                 <div class="flex justify-between border-b border-stone-100 pb-2">
                     <span class="font-medium text-stone-500"><i class="fa-solid fa-calendar text-velvet-800 me-2"></i>Date:</span>
@@ -605,25 +593,18 @@
             <div id="car-date-options" class="bg-white/80 backdrop-blur-sm p-4 sm:p-6 rounded-xl border border-gold/30 shadow-sm hidden">
                 <div class="flex items-center space-x-2 mb-3 text-velvet-900">
                     <i class="fa-solid fa-music text-gold text-base"></i>
-                    <h3 class="serif-font text-lg sm:text-xl font-bold tracking-wide">2. Choose Your Ride Soundtrack</h3>
+                    <h3 class="serif-font text-lg sm:text-xl font-bold tracking-wide">2. Build Your Ride Playlist</h3>
                 </div>
-                <div class="grid grid-cols-1 gap-2.5" id="music-options">
-                    <button type="button" aria-pressed="true" onclick="selectMusic(this, 'Late Night Jazz / Chill R&B')" class="option-card selected p-3.5 rounded-xl cursor-pointer flex items-center justify-between text-left">
-                        <span class="flex items-center gap-3"><i class="fa-solid fa-moon text-velvet-700"></i><span><span class="font-semibold text-velvet-950 text-sm block">Late Night Jazz / Chill R&amp;B</span><span class="text-xs text-stone-500">Smooth, mellow late-night vibes</span></span></span>
-                        <span class="check-icon w-5 h-5 rounded-full bg-velvet-800 text-gold flex items-center justify-center text-xs opacity-100 transition-all"><i class="fa-solid fa-check"></i></span>
+                <p class="text-xs text-stone-500 mb-3">Add the songs you'd love to hear on our drive. Blank song fields are skipped.</p>
+                <ol id="song-list" class="song-list space-y-2" aria-label="Ride playlist songs">
+                    <li class="song-row"><label class="song-label"><span class="song-number">1.</span><input class="song-input" type="text" name="songs[]" maxlength="120" autocomplete="off" placeholder="Song title — artist (optional)" aria-label="Song 1"></label></li>
+                    <li class="song-row"><label class="song-label"><span class="song-number">2.</span><input class="song-input" type="text" name="songs[]" maxlength="120" autocomplete="off" placeholder="Song title — artist (optional)" aria-label="Song 2"></label></li>
+                </ol>
+                <div class="flex items-center justify-between gap-3 mt-4">
+                    <button id="add-song-button" type="button" onclick="addSongInput()" class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-velvet-800 text-gold border border-gold/40 text-xs font-semibold shadow-sm transition hover:bg-velvet-900 active:scale-95 focus:outline-none focus:ring-2 focus:ring-gold/70">
+                        <i class="fa-solid fa-plus"></i> Add Song
                     </button>
-                    <button type="button" aria-pressed="false" onclick="selectMusic(this, 'Classic Arabic Classics / Tarab')" class="option-card p-3.5 rounded-xl cursor-pointer flex items-center justify-between text-left">
-                        <span class="flex items-center gap-3"><i class="fa-solid fa-star-and-crescent text-velvet-700"></i><span><span class="font-semibold text-velvet-950 text-sm block">Classic Arabic Classics / Tarab</span><span class="text-xs text-stone-500">Timeless Arabic melodies</span></span></span>
-                        <span class="check-icon w-5 h-5 rounded-full bg-velvet-800 text-gold flex items-center justify-center text-xs opacity-0 transition-all"><i class="fa-solid fa-check"></i></span>
-                    </button>
-                    <button type="button" aria-pressed="false" onclick="selectMusic(this, 'Acoustic Indie & Soft Pop')" class="option-card p-3.5 rounded-xl cursor-pointer flex items-center justify-between text-left">
-                        <span class="flex items-center gap-3"><i class="fa-solid fa-guitar text-velvet-700"></i><span><span class="font-semibold text-velvet-950 text-sm block">Acoustic Indie &amp; Soft Pop</span><span class="text-xs text-stone-500">Gentle guitars and easy favorites</span></span></span>
-                        <span class="check-icon w-5 h-5 rounded-full bg-velvet-800 text-gold flex items-center justify-center text-xs opacity-0 transition-all"><i class="fa-solid fa-check"></i></span>
-                    </button>
-                    <button type="button" aria-pressed="false" onclick="selectMusic(this, 'Custom Playlist / Surprise Me')" class="option-card p-3.5 rounded-xl cursor-pointer flex items-center justify-between text-left">
-                        <span class="flex items-center gap-3"><i class="fa-solid fa-gift text-velvet-700"></i><span><span class="font-semibold text-velvet-950 text-sm block">Custom Playlist / Surprise Me</span><span class="text-xs text-stone-500">Your playlist—or leave it as a surprise</span></span></span>
-                        <span class="check-icon w-5 h-5 rounded-full bg-velvet-800 text-gold flex items-center justify-center text-xs opacity-0 transition-all"><i class="fa-solid fa-check"></i></span>
-                    </button>
+                    <span id="song-count" class="text-[11px] text-stone-500" aria-live="polite">0 songs entered</span>
                 </div>
             </div>
 
@@ -778,9 +759,9 @@
 
                 <div class="flex items-center space-x-3 border-t border-stone-100 pt-2">
                     <i class="fa-solid fa-music text-velvet-800 w-4 text-center"></i>
-                    <div>
-                        <span class="block text-[10px] text-stone-400 uppercase font-semibold">Music</span>
-                        <span id="modal-music" class="font-medium text-stone-800">Not applicable</span>
+                    <div class="min-w-0 flex-1">
+                        <span class="block text-[10px] text-stone-400 uppercase font-semibold">Ride Playlist</span>
+                        <ol id="modal-songs" class="list-decimal list-inside text-stone-800 font-medium space-y-1 mt-1"></ol>
                     </div>
                 </div>
 
@@ -934,11 +915,12 @@
             await authReady;
             if (!currentUser) throw new Error('Not connected to Firebase.');
             try {
+                const songs = window.selectedDateType === 'Car Date' ? getSelectedSongs() : [];
                 await setDoc(responseDocRef, {
                     status: status ? 'Accepted' : 'Declined',
                     dateType: window.selectedDateType,
                     location: window.selectedDateType === 'Car Date' ? 'Private, cozy drive' : window.selectedLoc,
-                    musicChoice: window.selectedDateType === 'Car Date' ? window.selectedMusicChoice : '',
+                    songs,
                     date: window.selectedDateText,
                     time: window.selectedTime,
                     timestamp: serverTimestamp()
@@ -962,7 +944,7 @@
                     status: 'Pending',
                     dateType: 'Regular Date',
                     location: "CC's House",
-                    musicChoice: '',
+                    songs: [],
                     date: "Tuesday, Nov 10, 2026",
                     time: "06:30 PM",
                     timestamp: serverTimestamp()
@@ -981,7 +963,6 @@
         // State Variables
         window.selectedLoc = "CC's House";
         window.selectedDateType = 'Regular Date';
-        window.selectedMusicChoice = 'Late Night Jazz / Chill R&B';
         window.selectedDateText = "Tuesday, Nov 10, 2026";
         window.selectedDateISO = "2026-11-10";
         window.selectedTime = "06:30 PM";
@@ -1104,7 +1085,9 @@
         }
 
         // 3D Envelope Unfolding & Body Scroll Unlock Logic
-        function openEnvelope() {
+        function openEnvelope(event) {
+            event?.preventDefault();
+            event?.stopPropagation();
             const envelope = document.getElementById('envelope');
             const envelopeScreen = document.getElementById('envelope-screen');
             const mainContent = document.getElementById('main-invitation');
@@ -1118,7 +1101,7 @@
 
             setTimeout(() => {
                 envelopeScreen.style.opacity = '0';
-                envelopeScreen.style.transform = 'translateY(-20px)';
+                envelopeScreen.style.transform = 'translateY(-14px) scale(0.985)';
                 
                 setTimeout(() => {
                     envelopeScreen.style.visibility = 'hidden';
@@ -1132,8 +1115,8 @@
                     setTimeout(() => {
                         mainContent.classList.remove('opacity-0');
                     }, 50);
-                }, 700);
-            }, 950);
+                }, 900);
+            }, 1050);
         }
 
         // Toggle Host Dashboard View
@@ -1164,7 +1147,8 @@
             const badge = document.getElementById('admin-status-badge');
             const loc = document.getElementById('admin-loc');
             const dateType = document.getElementById('admin-date-type');
-            const music = document.getElementById('admin-music');
+            const songsRow = document.getElementById('admin-songs-row');
+            const songsList = document.getElementById('admin-songs');
             const date = document.getElementById('admin-date');
             const time = document.getElementById('admin-time');
             const ts = document.getElementById('admin-timestamp');
@@ -1174,7 +1158,8 @@
                 badge.innerHTML = `<i class="fa-solid fa-hourglass-half me-1"></i> Waiting for Her Response`;
                 dateType.textContent = data?.dateType || 'Regular Date';
                 loc.textContent = data?.location || "CC's House";
-                music.textContent = data?.dateType === 'Car Date' && data.musicChoice ? data.musicChoice : 'Not applicable';
+                renderSongList(songsList, data?.dateType === 'Car Date' ? data.songs : []);
+                songsRow.classList.toggle('hidden', data?.dateType !== 'Car Date');
                 date.textContent = data?.date || "Tuesday, Nov 10, 2026";
                 time.textContent = data?.time || '06:30 PM';
                 ts.textContent = "Not responded yet";
@@ -1191,7 +1176,8 @@
 
             dateType.textContent = data.dateType || 'Regular Date';
             loc.textContent = data.location || "CC's House";
-            music.textContent = data.dateType === 'Car Date' && data.musicChoice ? data.musicChoice : 'Not applicable';
+            renderSongList(songsList, data.dateType === 'Car Date' ? data.songs : []);
+            songsRow.classList.toggle('hidden', data.dateType !== 'Car Date');
             date.textContent = data.date || window.selectedDateText;
             time.textContent = data.time || window.selectedTime;
             const timestamp = data.timestamp?.toDate ? data.timestamp.toDate() : data.timestamp;
@@ -1216,29 +1202,81 @@
             updateSummary();
         }
 
-        // Music choice for a Car Date
-        function selectMusic(element, musicChoice) {
-            playChimeEffect();
-            const cards = document.querySelectorAll('#music-options .option-card');
-            cards.forEach(card => {
-                card.classList.remove('selected');
-                card.setAttribute('aria-pressed', 'false');
-                const check = card.querySelector('.check-icon');
-                if (check) {
-                    check.classList.add('opacity-0');
-                    check.classList.remove('opacity-100');
-                }
-            });
+        function getSelectedSongs() {
+            return Array.from(document.querySelectorAll('#song-list input[name="songs[]"]'))
+                .map(input => input.value.trim())
+                .filter(Boolean);
+        }
 
-            element.classList.add('selected');
-            element.setAttribute('aria-pressed', 'true');
-            const check = element.querySelector('.check-icon');
-            if (check) {
-                check.classList.remove('opacity-0');
-                check.classList.add('opacity-100');
+        function renderSongList(list, songs) {
+            list.replaceChildren();
+            (Array.isArray(songs) ? songs : []).forEach(song => {
+                const item = document.createElement('li');
+                item.textContent = song;
+                list.appendChild(item);
+            });
+            if (!list.children.length) {
+                const emptyItem = document.createElement('li');
+                emptyItem.textContent = 'No songs entered';
+                emptyItem.className = 'list-none italic text-stone-500';
+                list.appendChild(emptyItem);
             }
-            window.selectedMusicChoice = musicChoice;
+        }
+
+        function updateSongCount() {
+            const count = getSelectedSongs().length;
+            document.getElementById('song-count').textContent = `${count} song${count === 1 ? '' : 's'} entered`;
             updateSummary();
+        }
+
+        function addSongInput() {
+            const list = document.getElementById('song-list');
+            const inputs = list.querySelectorAll('input[name="songs[]"]');
+            if (inputs.length >= 30) return;
+            const number = inputs.length + 1;
+            const item = document.createElement('li');
+            item.className = 'song-row';
+
+            const label = document.createElement('label');
+            label.className = 'song-label';
+            const index = document.createElement('span');
+            index.className = 'song-number';
+            index.textContent = `${number}.`;
+            const input = document.createElement('input');
+            input.className = 'song-input';
+            input.type = 'text';
+            input.name = 'songs[]';
+            input.maxLength = 120;
+            input.autocomplete = 'off';
+            input.placeholder = 'Song title — artist (optional)';
+            input.setAttribute('aria-label', `Song ${number}`);
+            input.addEventListener('input', updateSongCount);
+
+            label.append(index, input);
+            item.appendChild(label);
+            list.appendChild(item);
+            input.focus();
+            document.getElementById('add-song-button').disabled = number >= 30;
+            playChimeEffect();
+        }
+
+        document.querySelectorAll('#song-list input[name="songs[]"]').forEach(input => {
+            input.classList.add('song-input');
+            input.addEventListener('input', updateSongCount);
+        });
+        updateSongCount();
+
+        function populateModalSongs(songs) {
+            const list = document.getElementById('modal-songs');
+            list.replaceChildren();
+            if (!songs.length) {
+                const emptyItem = document.createElement('li');
+                emptyItem.textContent = 'No songs entered';
+                emptyItem.className = 'list-none italic text-stone-500';
+                list.appendChild(emptyItem);
+                return;
+            }
+            renderSongList(list, songs);
         }
 
         // Location Selection
@@ -1300,7 +1338,9 @@
         function updateSummary() {
             const summary = document.getElementById('summary-text');
             if (window.selectedDateType === 'Car Date') {
-                summary.textContent = `Car Date on ${window.selectedDateText} at ${window.selectedTime} • Music: ${window.selectedMusicChoice}`;
+                const songs = getSelectedSongs();
+                const playlistSummary = songs.length ? `${songs.length} song${songs.length === 1 ? '' : 's'} in your playlist` : 'add your favorite songs';
+                summary.textContent = `Car Date on ${window.selectedDateText} at ${window.selectedTime} • ${playlistSummary}`;
             } else {
                 summary.textContent = `Regular Date at ${window.selectedLoc} on ${window.selectedDateText} at ${window.selectedTime}`;
             }
@@ -1379,7 +1419,9 @@
             if (accepted) {
                 document.getElementById('modal-date-type').textContent = window.selectedDateType;
                 document.getElementById('modal-loc').textContent = window.selectedDateType === 'Car Date' ? 'Private, cozy drive' : window.selectedLoc;
-                document.getElementById('modal-music').textContent = window.selectedDateType === 'Car Date' ? window.selectedMusicChoice : 'Not applicable';
+                const songs = window.selectedDateType === 'Car Date' ? getSelectedSongs() : [];
+                document.getElementById('modal-songs').closest('.flex').classList.toggle('hidden', window.selectedDateType !== 'Car Date');
+                populateModalSongs(songs);
                 document.getElementById('modal-date').textContent = window.selectedDateText;
                 document.getElementById('modal-time').textContent = window.selectedTime;
 
